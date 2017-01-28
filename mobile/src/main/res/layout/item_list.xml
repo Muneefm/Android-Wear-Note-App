@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_marginBottom="0dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:selectableItemBackground"    android:layout_height="wrap_content">
+
+<TextView
+    android:id="@+id/title_note"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="This is an example"
+    android:textSize="18dp"
+    android:lines="1"
+    android:textStyle="bold"
+    android:ellipsize="end"
+    android:textColor="@color/grey900"
+    />
+
+    <TextView
+        android:id="@+id/body_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is an example"
+        android:textSize="12dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/grey600"
+        />
+    <Button
+        android:id="@+id/undo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="undo"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:layout_gravity="end|center_vertical"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        />
+
+</LinearLayout>
