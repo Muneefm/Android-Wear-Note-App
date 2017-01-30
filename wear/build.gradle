@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "mnf.android.wearnote"
-        minSdkVersion 25
+        minSdkVersion 23
         targetSdkVersion 25
 
         versionCode 1
