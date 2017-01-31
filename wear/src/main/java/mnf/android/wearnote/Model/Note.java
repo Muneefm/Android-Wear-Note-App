@@ -1,17 +1,21 @@
 package mnf.android.wearnote.Model;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 /**
  * Created by muneef on 26/01/17.
  */
-//@Table(name = "note")
-public class Note  {
- //   @Column(name ="idn")
+@Table(name = "note")
+public class Note extends Model {
+    @Column(name ="idn")
     public Integer idn;
- //   @Column(name ="title")
+    @Column(name ="title")
     public String title;
- //   @Column(name ="body")
+    @Column(name ="body")
     public String body;
- //   @Column(name ="date")
+    @Column(name ="date")
     public String date;
 
     public Note() {

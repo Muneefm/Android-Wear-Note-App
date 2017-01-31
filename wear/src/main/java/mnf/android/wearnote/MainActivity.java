@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         listItem.add(new MenuModel("2","Settings"));
 
         mRecyclerView.setAdapter(new RecycleAdapterMenu(this,listItem));
-
+        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
 
 
     }
@@ -138,7 +138,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         }
     }
 
-    public class MyOffsettingHelper extends DefaultOffsettingHelper {
+    public static  class MyOffsettingHelper extends DefaultOffsettingHelper {
 
         /** How much should we scale the icon at most. */
         private static final float MAX_ICON_PROGRESS = 0.65f;
