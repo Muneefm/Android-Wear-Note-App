@@ -51,6 +51,8 @@ public class DataLayerListenerService extends WearableListenerService {
 
     public void saveDataToDB(BaseModel model){
 
+        Note.truncate(Note.class);
+
         ActiveAndroid.beginTransaction();
         try {
             for (Note modelNote : model.getNote()) {

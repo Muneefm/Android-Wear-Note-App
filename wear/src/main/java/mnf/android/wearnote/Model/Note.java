@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
  * Created by muneef on 26/01/17.
  */
 @Table(name = "note")
-public class Note extends Model {
+public class Note extends TruncatableModel {
     @Column(name ="idn")
     public Integer idn;
     @Column(name ="title")
