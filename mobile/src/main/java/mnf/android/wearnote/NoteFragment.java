@@ -130,6 +130,7 @@ public class NoteFragment extends Fragment {
                         .set("title = "+"'"+lines[0].trim()+"'")
                         .where("idn = ?", mParam1)
                         .execute();
+                MainActivity.syncDatatoWear();
             }
         });
 
