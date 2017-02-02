@@ -1,6 +1,7 @@
 package mnf.android.wearnote;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.activeandroid.DatabaseHelper;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 
@@ -115,10 +117,15 @@ public class NoteFragment extends Fragment {
                 String multiLines = s.toString();
                 String[] lines;
                 String delimiter = "\n";
+                Log.e("TAG","string before escape = "+s.toString());
+
+                String str = DatabaseUtils.sqlEscapeString(s.toString());
+               // s.toString().replaceAll("'","''");
+                Log.e("TAG","string after escape = "+str);
 
                 lines = multiLines.split(delimiter);
                 new Update(Note.class)
-                        .set("body = "+"'"+s+"'")
+                        .set("body = "+str)
                         .where("idn = ?", mParam1)
                         .execute();
                 new Update(Note.class)
@@ -127,7 +134,7 @@ public class NoteFragment extends Fragment {
                         .execute();
                 if(lines[0]!=null)
                 new Update(Note.class)
-                        .set("title = "+"'"+lines[0].trim()+"'")
+                        .set("title = "+""+DatabaseUtils.sqlEscapeString(lines[0].trim())+"")
                         .where("idn = ?", mParam1)
                         .execute();
                 MainActivity.syncDatatoWear();

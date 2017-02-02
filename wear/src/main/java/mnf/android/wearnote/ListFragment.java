@@ -11,8 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.List;
+
 import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
 import mnf.android.wearnote.Adapter.RecycleAdapterNotes;
+import mnf.android.wearnote.Fragment.FragmentNote;
+import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.Config;
 import mnf.android.wearnote.Tools.RecyclerTouchListener;
 import mnf.android.wearnote.Tools.SimpleDividerItemDecoration;
@@ -37,7 +41,7 @@ public class ListFragment extends Fragment {
     private String mParam2;
 
     WearableRecyclerView mRecyclerView;
-
+    List<Note> noteData;
 
 
     private OnFragmentInteractionListener mListener;
@@ -87,14 +91,19 @@ public class ListFragment extends Fragment {
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mRecyclerView.setBezelWidth(0.5f);
         mRecyclerView.setScrollDegreesPerScreen(90);
-        mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), Config.getDBItems()));
+         noteData = Config.getDBItems();
+        mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteData));
 
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 // Movie movie = movieList.get(position);
                 //  Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
-                Log.e("TAG", "position = " + position);
+                Log.e("TAG", " addOnItemTouchListener position = " + position);
+                if(noteData!=null) {
+                    Note noteItem = noteData.get(position);
+                    getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
+                }
                 //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
 
             }
