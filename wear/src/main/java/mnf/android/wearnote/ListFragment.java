@@ -5,13 +5,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.wearable.view.WearableRecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
 import mnf.android.wearnote.Adapter.RecycleAdapterNotes;
 import mnf.android.wearnote.Tools.Config;
+import mnf.android.wearnote.Tools.RecyclerTouchListener;
+import mnf.android.wearnote.Tools.SimpleDividerItemDecoration;
 
 
 /**
@@ -78,17 +82,31 @@ public class ListFragment extends Fragment {
         mRecyclerView.setCenterEdgeItems(true);
 
         MainActivity.MyOffsettingHelper myOffsettingHelper = new MainActivity.MyOffsettingHelper();
-        mRecyclerView.setOffsettingHelper(myOffsettingHelper);
-        mRecyclerView.setCircularScrollingGestureEnabled(true);
+        //mRecyclerView.setOffsettingHelper(myOffsettingHelper);
+        //mRecyclerView.setCircularScrollingGestureEnabled(true);
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mRecyclerView.setBezelWidth(0.5f);
         mRecyclerView.setScrollDegreesPerScreen(90);
         mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), Config.getDBItems()));
 
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                // Movie movie = movieList.get(position);
+                //  Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
+                Log.e("TAG", "position = " + position);
+                //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
 
-
-
-        return  v;
+            return  v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

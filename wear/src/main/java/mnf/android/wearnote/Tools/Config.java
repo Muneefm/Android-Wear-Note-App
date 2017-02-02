@@ -1,5 +1,6 @@
 package mnf.android.wearnote.Tools;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import mnf.android.wearnote.Model.Note;
 public class Config {
 
     public static List<Note> getDBItems(){
+
         List<Note> notes =new Select()
                 .all()
                 .from(Note.class)

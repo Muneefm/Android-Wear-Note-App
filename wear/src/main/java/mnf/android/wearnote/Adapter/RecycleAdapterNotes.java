@@ -1,6 +1,7 @@
 package mnf.android.wearnote.Adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.wearable.view.WearableRecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +60,8 @@ public class RecycleAdapterNotes  extends WearableRecyclerView.Adapter<RecycleAd
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-
+        Typeface face=Typeface.createFromAsset(mContext.getAssets(), "fonts/Quicksand-Regular.ttf");
+        holder.textView.setTypeface(face);
         Note noteModel = mDataset.get(position);
         holder.dateTv.setText(noteModel.getDate());
         holder.textView.setText(noteModel.getTitle());

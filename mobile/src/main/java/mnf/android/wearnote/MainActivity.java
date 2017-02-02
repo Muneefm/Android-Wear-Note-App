@@ -147,10 +147,8 @@ public class MainActivity extends AppCompatActivity
         Log.e("TAG","jsonString = "+json);
         final PutDataMapRequest putRequest = PutDataMapRequest.create("/notes");
         final DataMap map = putRequest.getDataMap();
-
       //  map.putInt("color", Color.RED);
         map.putString("database", json);
-
         Wearable.DataApi.putDataItem(mGoogleApiClient,  putRequest.asPutDataRequest());
     }
 
