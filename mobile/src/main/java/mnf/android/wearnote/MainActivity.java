@@ -1,5 +1,7 @@
 package mnf.android.wearnote;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,9 +37,11 @@ import com.google.gson.GsonBuilder;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import mnf.android.wearnote.Activity.SettingsActivity;
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
+import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,DataApi.DataListener,
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private static final String COUNT_KEY = "count";
     private int count = 0;
 
+    static Context c;
 
 
     @Override
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        c =this;
 
 
 
@@ -88,7 +94,7 @@ public class MainActivity extends AppCompatActivity
     public void onConnected(@Nullable Bundle bundle) {
     Log.e("TAG","onConnected");
       //  syncData();
-        putWearData();
+      //  putWearData();
     }
 
     @Override
@@ -152,6 +158,17 @@ public class MainActivity extends AppCompatActivity
         Wearable.DataApi.putDataItem(mGoogleApiClient,  putRequest.asPutDataRequest());
     }
 
+    public static void syncPrefToWear(){
+        WearPreferenceHandler pref =new WearPreferenceHandler(c);
+        Log.e("TAG","syncing Preference to wear f_size = "+pref.getFontSize()+" theme = "+pref.getTheme());
+
+        final PutDataMapRequest putRequestPref = PutDataMapRequest.create("/pref");
+        final DataMap mapPref = putRequestPref.getDataMap();
+        mapPref.putString("font_size", pref.getFontSize());
+        mapPref.putBoolean("theme",pref.getTheme());
+        Wearable.DataApi.putDataItem(mGoogleApiClient,  putRequestPref.asPutDataRequest());
+    }
+
 
 
 
@@ -186,6 +203,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent set = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(set);
             return true;
         }
 

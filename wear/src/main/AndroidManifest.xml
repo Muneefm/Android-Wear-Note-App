@@ -20,19 +20,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="AA_DB_NAME" android:value="notewear.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
-       <!-- <service android:name=".Tools.DataLayerListenerService">
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="notewear.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+        <!--
+            <service android:name=".Tools.DataLayerListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
                 <data android:scheme="wear" android:host="*"
                     android:path="/start-activity" />
-            </intent-filter> -->
-        <service android:name=".Tools.DataLayerListenerService" >
+            </intent-filter>
+        -->
+        <service android:name=".Tools.DataLayerListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>

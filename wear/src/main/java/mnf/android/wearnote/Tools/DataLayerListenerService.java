@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import mnf.android.wearnote.AppController;
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 
@@ -33,8 +34,9 @@ public class DataLayerListenerService extends WearableListenerService {
         for (DataEvent event : events) {
             final Uri uri = event.getDataItem().getUri();
             final String path = uri != null ? uri.getPath() : null;
+            final DataMap map = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
+
             if ("/notes".equals(path)) {
-                final DataMap map = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
                 // read your values from map:
                 // int color = map.getInt("color");
                 String stringExample = map.getString("database");
@@ -45,6 +47,13 @@ public class DataLayerListenerService extends WearableListenerService {
                 BaseModel baseModel =  gson.fromJson(stringExample, BaseModel.class);
                 Log.e("TAG", "baseModel = " + baseModel.getNote().size());
                 saveDataToDB(baseModel);
+            }
+            if("/pref".equals(path)){
+                Log.e("TAG","pref f_size = "+map.getString("font_size")+" theme "+map.getBoolean("theme"));
+                WearPreferenceHandler pref = new WearPreferenceHandler(AppController.getInstance());
+                pref.setFontSize(map.getString("font_size"));
+                pref.setTheme(map.getBoolean("theme"));
+
             }
         }
     }

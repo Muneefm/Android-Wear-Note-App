@@ -7,9 +7,11 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import mnf.android.wearnote.R;
+import mnf.android.wearnote.Tools.WearPreferenceHandler;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +33,8 @@ public class FragmentNote extends Fragment {
 
     private OnFragmentInteractionListener mListener;
         TextView tvNote;
+    RelativeLayout rootContainer;
+    WearPreferenceHandler pref;
     public FragmentNote() {
         // Required empty public constructor
     }
@@ -68,7 +72,35 @@ public class FragmentNote extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_fragment_note, container, false);
         tvNote = (TextView) v.findViewById(R.id.note);
-        tvNote.setText(mParam2);
+        rootContainer = (RelativeLayout) v.findViewById(R.id.note_frag_container);
+        pref =new WearPreferenceHandler(getActivity());
+        if(pref.getTheme())
+        rootContainer.setBackgroundColor(getResources().getColor(R.color.black));
+        else
+            rootContainer.setBackgroundColor(getResources().getColor(R.color.white));
+
+
+        switch (pref.getFontSize()){
+            case "0":
+                tvNote.setTextSize(15f);
+                break;
+            case "1":
+                tvNote.setTextSize(20f);
+                break;
+            case "2":
+                tvNote.setTextSize(25f);
+                break;
+            case "3":
+                tvNote.setTextSize(30f);
+                break;
+            default:
+                tvNote.setTextSize(25f);
+                break;
+        }
+        if(!mParam2.equals("")&&mParam2!=null) {
+            tvNote.setText(mParam2);
+            tvNote.setVisibility(View.VISIBLE);
+        }
         return v;
     }
 

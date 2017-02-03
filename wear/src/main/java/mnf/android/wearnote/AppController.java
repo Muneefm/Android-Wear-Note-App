@@ -1,6 +1,7 @@
 package mnf.android.wearnote;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.activeandroid.ActiveAndroid;
 
@@ -9,11 +10,17 @@ import com.activeandroid.ActiveAndroid;
  */
 
 public class AppController extends Application {
+    static Context c;
     @Override
     public void onCreate() {
         super.onCreate();
 
+        c =  this;
         ActiveAndroid.initialize(this);
 
+    }
+
+    public static Context getInstance(){
+        return c;
     }
 }

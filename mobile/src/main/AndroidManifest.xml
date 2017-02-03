@@ -19,10 +19,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="AA_DB_NAME" android:value="note.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="note.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
 
         <service android:name=".MainActivity" />
+
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".Activity.PreferanceActivityNew"></activity>
     </application>
 
 </manifest>
