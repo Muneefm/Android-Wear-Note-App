@@ -8,7 +8,14 @@
 
 
 
+    <integer-array name="picker_color">
+        <item>@color/grey500</item>
+        <item>@color/grey700</item>
+        <item>@color/grey800</item>
+        <item>@color/grey900</item>
+        <item>@color/blue500</item>
 
+    </integer-array>
 
 
     <color name="orange400">#FFA726</color>

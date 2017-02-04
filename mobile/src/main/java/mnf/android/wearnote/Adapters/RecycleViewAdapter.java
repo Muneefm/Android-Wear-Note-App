@@ -77,7 +77,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Typeface face=Typeface.createFromAsset(c.getAssets(), "fonts/Quicksand-Regular.ttf");
+        Typeface face=Typeface.createFromAsset(c.getAssets(), "fonts/Cabin-Regular.ttf");
         holder.body.setTypeface(face);
         Typeface faceTitle=Typeface.createFromAsset(c.getAssets(), "fonts/Poppins-Regular.ttf");
       //  Typeface faceTitle=Typeface.createFromAsset(c.getAssets(), "fonts/Farsan-Regular.ttf");

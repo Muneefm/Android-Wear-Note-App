@@ -131,6 +131,8 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         final DataMap mapPref = putRequestPref.getDataMap();
         mapPref.putString("font_size", pref.getFontSize());
         mapPref.putBoolean("theme",pref.getTheme());
+        mapPref.putInt("font_color",pref.getFontColor());
+        mapPref.putString("font_style",pref.getFontStyle());
         Wearable.DataApi.putDataItem(mGoogleApiClient,  putRequestPref.asPutDataRequest());
     }
 

@@ -4,13 +4,13 @@
 
     <header
         android:fragment="mnf.android.wearnote.Activity.SettingsActivity$WearPreferenceFragment"
-        android:icon="@drawable/ic_wear_black"
+        android:icon="@drawable/ic_wear_padding"
 
         android:title="Wear Settings" />
 
     <header
         android:fragment="mnf.android.wearnote.Activity.SettingsActivity$PhonePreferenceFragment"
-        android:icon="@drawable/ic_phone_black"
+        android:icon="@drawable/ic_phone_padding"
         android:title="Mobile App settings" />
 
   <!--  <header

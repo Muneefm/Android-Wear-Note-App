@@ -49,10 +49,12 @@ public class DataLayerListenerService extends WearableListenerService {
                 saveDataToDB(baseModel);
             }
             if("/pref".equals(path)){
-                Log.e("TAG","pref f_size = "+map.getString("font_size")+" theme "+map.getBoolean("theme"));
+                Log.e("TAG","pref f_size = "+map.getString("font_size")+" theme "+map.getBoolean("theme")+" color = "+map.getInt("font_color")+" style = "+map.getString("font_style"));
                 WearPreferenceHandler pref = new WearPreferenceHandler(AppController.getInstance());
                 pref.setFontSize(map.getString("font_size"));
                 pref.setTheme(map.getBoolean("theme"));
+                pref.setFontColor(map.getInt("font_color"));
+                pref.setFontStyle(map.getString("font_style"));
 
             }
         }

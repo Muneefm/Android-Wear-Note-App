@@ -2,6 +2,7 @@ package mnf.android.wearnote.Activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;

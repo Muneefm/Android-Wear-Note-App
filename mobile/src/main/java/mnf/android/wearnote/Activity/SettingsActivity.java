@@ -23,9 +23,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.thebluealliance.spectrum.SpectrumPreference;
+
 import mnf.android.wearnote.ApplicationClass;
 import mnf.android.wearnote.MainActivity;
 import mnf.android.wearnote.R;
+import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 import java.util.List;
@@ -179,8 +182,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class WearPreferenceFragment extends PreferenceFragment {
         SwitchPreference switchTheme;
-        ListPreference fontSize;
+        ListPreference fontSize,fontStyle;
          WearPreferenceHandler pref;
+        SpectrumPreference colorPicker;
+
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -195,9 +200,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
           //  bindPreferenceSummaryToValue(findPreference("example_text"));
             bindPreferenceSummaryToValue(findPreference("fontsize_list"));
-           // bindPreferenceSummaryToValue(findPreference("switchTheme"));
+            bindPreferenceSummaryToValue(findPreference("font_style"));
+
+            // bindPreferenceSummaryToValue(findPreference("switchTheme"));
 
             //switchTheme =
+            fontStyle = (ListPreference) findPreference("font_style");
+            colorPicker = (SpectrumPreference) findPreference("color_pick");
             fontSize = (ListPreference) findPreference("fontsize_list");
             switchTheme = (SwitchPreference) findPreference("theme_switch");
             switchTheme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -225,6 +234,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
+            colorPicker.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Log.e("TAG","value String = "+newValue.toString());
+                    pref.setFontColor(Integer.parseInt(newValue.toString()));
+                    ApplicationClass.syncPrefToWear(pref);
+
+                    return true;
+                }
+            });
+            fontStyle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String[] items =   getActivity().getResources().getStringArray(R.array.pref_style_title);
+                    fontStyle.setSummary(items[3-Integer.parseInt(newValue.toString())]);
+                    pref.setFontStyle(newValue.toString());
+                    ApplicationClass.syncPrefToWear(pref);
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -244,18 +274,52 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class PhonePreferenceFragment extends PreferenceFragment {
+        ListPreference fontSize,fontStyle;
+        MobilePreferenceHandler pref;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
-            Log.e("TAG","GeneralPreferenceFragment onCreate");
+            pref= new MobilePreferenceHandler(getActivity());
+            Log.e("TAG","PhonePreferenceFragment onCreate");
+            bindPreferenceSummaryToValue(findPreference("fontsize_list_mobile"));
+            bindPreferenceSummaryToValue(findPreference("font_style_mobile"));
+            fontStyle = (ListPreference) findPreference("font_style_mobile");
+            fontSize = (ListPreference) findPreference("fontsize_list_mobile");
+
+            fontStyle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Log.e("TAG","onPreferenceChange fontStyle mobile");
+                    String[] items =   getActivity().getResources().getStringArray(R.array.pref_style_title);
+                    fontStyle.setSummary(items[3-Integer.parseInt(newValue.toString())]);
+                    pref.setFontStyle(newValue.toString());
+                    return true;
+                }
+            });
+
+            fontSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Log.e("TAG","onPreferenceChange fontSize mobile = "+newValue.toString());
+
+                    String[] items =   getActivity().getResources().getStringArray(R.array.pref_text_size_list_titles);
+                    fontSize.setSummary(items[3-Integer.parseInt(newValue.toString())]);
+                    pref.setFontSize(newValue.toString());
+
+                    return true;
+                }
+            });
+
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+
+
         }
 
         @Override

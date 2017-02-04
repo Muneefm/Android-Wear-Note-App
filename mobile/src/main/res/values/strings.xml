@@ -24,6 +24,7 @@
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <!-- font size -->
     <string-array name="pref_text_size_list_titles">
         <item>Large</item>
         <item>Medium</item>
@@ -37,6 +38,24 @@
         <item>1</item>
         <item>0</item>
     </string-array>
+
+    <!-- font style -->
+
+    <string-array name="pref_style_title">
+        <item>Cabin</item>
+        <item>Nunito Sans</item>
+        <item>Roboto</item>
+        <item>Yellowtail</item>
+
+    </string-array>
+    <string-array name="pref_style_value">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

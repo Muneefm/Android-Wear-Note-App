@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.Config;
 import mnf.android.wearnote.Tools.RecyclerTouchListener;
 import mnf.android.wearnote.Tools.SimpleDividerItemDecoration;
+import mnf.android.wearnote.Tools.WearPreferenceHandler;
 
 
 /**
@@ -42,7 +44,8 @@ public class ListFragment extends Fragment {
 
     WearableRecyclerView mRecyclerView;
     List<Note> noteData;
-
+    RelativeLayout headerLayout;
+    WearPreferenceHandler pref;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,15 +85,19 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_list, container, false);
+        pref = new WearPreferenceHandler(getActivity());
         mRecyclerView = (WearableRecyclerView) v.findViewById(R.id.notes_recycler_view);
-        mRecyclerView.setCenterEdgeItems(true);
-
+      //  mRecyclerView.setCenterEdgeItems(true);
+        headerLayout = (RelativeLayout) v.findViewById(R.id.rel_head);
+        if(pref.getTheme()){
+            headerLayout.setBackgroundColor(getResources().getColor(R.color.black));
+        }
         MainActivity.MyOffsettingHelper myOffsettingHelper = new MainActivity.MyOffsettingHelper();
         //mRecyclerView.setOffsettingHelper(myOffsettingHelper);
         //mRecyclerView.setCircularScrollingGestureEnabled(true);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mRecyclerView.setBezelWidth(0.5f);
-        mRecyclerView.setScrollDegreesPerScreen(90);
+        //mRecyclerView.setScrollDegreesPerScreen(90);
          noteData = Config.getDBItems();
         mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteData));
 

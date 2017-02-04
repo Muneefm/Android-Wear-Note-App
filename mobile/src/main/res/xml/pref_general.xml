@@ -1,4 +1,6 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Android Wear settings">
 
     <SwitchPreference
         android:defaultValue="true"
@@ -32,4 +34,22 @@
         android:positiveButtonText="@null"
         android:title="Font Size" />
 
+     <com.thebluealliance.spectrum.SpectrumPreference
+        android:defaultValue="@color/grey800"
+        android:key="color_pick"
+        android:summary="Note font color."
+        android:title="Font Color"
+        app:spectrum_colors="@array/picker_color"
+        app:spectrum_outlineWidth="2dp"/>
+
+
+    <ListPreference
+        android:defaultValue="%s"
+        android:entries="@array/pref_style_title"
+        android:entryValues="@array/pref_style_value"
+        android:key="font_style"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="Select Font Style" />
+    </PreferenceCategory>
 </PreferenceScreen>

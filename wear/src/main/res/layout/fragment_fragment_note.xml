@@ -17,7 +17,8 @@
 
     <ScrollView
 
-    android:layout_width="match_parent"        app:layout_box="left|right"
+    android:layout_width="match_parent"
+        app:layout_box="left|right"
 
 android:layout_gravity="center"
         android:layout_height="match_parent">

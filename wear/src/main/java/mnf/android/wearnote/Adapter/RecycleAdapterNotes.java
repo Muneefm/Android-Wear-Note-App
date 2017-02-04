@@ -60,7 +60,7 @@ public class RecycleAdapterNotes  extends WearableRecyclerView.Adapter<RecycleAd
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Typeface face=Typeface.createFromAsset(mContext.getAssets(), "fonts/Quicksand-Regular.ttf");
+        Typeface face=Typeface.createFromAsset(mContext.getAssets(), "fonts/Cabin-Regular.ttf");
         holder.textView.setTypeface(face);
         Note noteModel = mDataset.get(position);
         holder.dateTv.setText(noteModel.getDate());

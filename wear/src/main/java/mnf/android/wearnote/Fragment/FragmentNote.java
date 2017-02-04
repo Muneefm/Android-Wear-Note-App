@@ -1,6 +1,7 @@
 package mnf.android.wearnote.Fragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -80,15 +81,20 @@ public class FragmentNote extends Fragment {
             rootContainer.setBackgroundColor(getResources().getColor(R.color.white));
 
 
+        Typeface faceYellowtail=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Yellowtail-Regular.ttf");
+        Typeface faceCabin=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Cabin-Regular.ttf");
+        Typeface faceRoboto=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
+        Typeface faceNunitoSans=Typeface.createFromAsset(getActivity().getAssets(), "fonts/NunitoSans-Regular.ttf");
+
         switch (pref.getFontSize()){
             case "0":
-                tvNote.setTextSize(15f);
+                tvNote.setTextSize(10f);
                 break;
             case "1":
-                tvNote.setTextSize(20f);
+                tvNote.setTextSize(15f);
                 break;
             case "2":
-                tvNote.setTextSize(25f);
+                tvNote.setTextSize(20f);
                 break;
             case "3":
                 tvNote.setTextSize(30f);
@@ -97,10 +103,33 @@ public class FragmentNote extends Fragment {
                 tvNote.setTextSize(25f);
                 break;
         }
+        switch (pref.getFontStyle()){
+            case "0":
+                tvNote.setTypeface(faceYellowtail);
+                break;
+            case "1":
+                tvNote.setTypeface(faceRoboto);
+                break;
+            case "2":
+                tvNote.setTypeface(faceNunitoSans);
+                break;
+            case "3":
+                tvNote.setTypeface(faceCabin);
+                break;
+            default:
+                tvNote.setTypeface(faceRoboto);
+                break;
+
+        }
+
         if(!mParam2.equals("")&&mParam2!=null) {
             tvNote.setText(mParam2);
+            tvNote.setTextColor(pref.getFontColor());
             tvNote.setVisibility(View.VISIBLE);
         }
+
+
+
         return v;
     }
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import mnf.android.wearnote.R;
+
 /**
  * Created by muneef on 03/02/17.
  */
@@ -19,6 +21,8 @@ public class WearPreferenceHandler {
     private static final String PREF_NAME = "settings_pref";
     final String fontSize= "font_size";
     final String theme= "theme";
+    final String fontColor="color";
+    final String fontStyle="font_style";
 
 
 
@@ -46,4 +50,25 @@ public class WearPreferenceHandler {
     public boolean getTheme(){
         return pref.getBoolean(theme, false);
     }
+
+
+    public void setFontColor(int var){
+        Log.e("TAG","setFontColor Set"+var );
+        editor.putInt(fontColor, var);
+        editor.commit();
+    }
+    public int getFontColor(){
+        return pref.getInt(fontColor, R.color.grey800);
+    }
+
+
+    public void setFontStyle(String var){
+        Log.e("TAG","setFontStyle Set"+var );
+        editor.putString(fontStyle, var);
+        editor.commit();
+    }
+    public String getFontStyle(){
+        return pref.getString(fontStyle, "1");
+    }
+
 }
