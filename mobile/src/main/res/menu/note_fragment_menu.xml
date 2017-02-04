@@ -8,3 +8,4 @@
         android:title="send to wear"
         app:showAsAction="always" />
 </menu>
+
