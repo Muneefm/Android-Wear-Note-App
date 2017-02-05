@@ -8,6 +8,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import mnf.android.wearnote.Config;
 import mnf.android.wearnote.MainActivity;
 import mnf.android.wearnote.R;
 
@@ -28,7 +29,7 @@ public class SendNotification {
 
     public static void sendNotificationWear(){
         Log.e("TAG","sendNotificationWear method");
-        int notificationId = 001;
+        int notificationId = Config.generateRandomInt();
 // Build intent for notification content
         Intent viewIntent = new Intent(context, MainActivity.class);
         //viewIntent.putExtra(EXTRA_EVENT_ID, eventId);

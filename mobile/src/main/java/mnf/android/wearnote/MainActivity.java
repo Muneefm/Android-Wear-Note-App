@@ -38,6 +38,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import mnf.android.wearnote.Activity.SettingsActivity;
+import mnf.android.wearnote.Fragments.ReminderFragments;
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
@@ -224,6 +225,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             Intent set = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(set);
+        }else if (id == R.id.nav_reminder){
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ReminderFragments().newInstance("","")).commit();
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

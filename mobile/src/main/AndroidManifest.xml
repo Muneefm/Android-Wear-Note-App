@@ -25,7 +25,7 @@
             android:value="note.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="3" />
 
         <service android:name=".MainActivity" />
 
@@ -33,6 +33,13 @@
             android:name=".Activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".Activity.PreferanceActivityNew"></activity>
+        <receiver android:name=".tools.Reciever">
+
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED">
+            </action>
+        </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

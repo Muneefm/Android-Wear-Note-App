@@ -1,11 +1,14 @@
 package mnf.android.wearnote;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DatabaseUtils;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -22,6 +25,7 @@ import android.widget.EditText;
 import com.activeandroid.DatabaseHelper;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -31,7 +35,10 @@ import butterknife.ButterKnife;
 import mnf.android.wearnote.Activity.SettingsActivity;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
+import mnf.android.wearnote.tools.Reciever;
 import mnf.android.wearnote.tools.SendNotification;
+
+import static android.content.Context.ALARM_SERVICE;
 
 
 /**
@@ -206,6 +213,26 @@ public class NoteFragment extends Fragment {
     return v;
     }
 
+    public  void openDateView(){
+
+
+        new SingleDateAndTimePickerDialog.Builder(context)
+                .bottomSheet()
+                .curved()
+                .minutesStep(1)
+
+                .title("Select date & time")
+                .listener(new SingleDateAndTimePickerDialog.Listener() {
+                    @Override
+                    public void onDateSelected(Date date) {
+                    Log.e("TAG","Date selected = "+date);
+                        Config.setReminder(date,context,Integer.parseInt(mParam1));
+                    }
+                }).display();
+    }
+
+
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -248,6 +275,9 @@ public class NoteFragment extends Fragment {
              new SendNotification(context,noteGet.body,noteGet.getTitle()).sendNotificationWear();
 
 
+            return true;
+        }else if(id == R.id.send_ontime){
+            openDateView();
             return true;
         }
         return super.onOptionsItemSelected(item);
