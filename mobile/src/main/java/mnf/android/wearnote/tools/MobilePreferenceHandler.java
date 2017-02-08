@@ -24,6 +24,8 @@ public class MobilePreferenceHandler {
   //  final String fontColor="colorm";
     final String fontStylem="font_style_m";
 
+    final String fabLearn="fab_learn";
+
 
 
 
@@ -50,6 +52,16 @@ public class MobilePreferenceHandler {
     }
     public String getFontStyle(){
         return pref.getString(fontStylem, "1");
+    }
+
+
+    public void setFabLearn(boolean var){
+        Log.e("TAG","setFontStyle Set"+var );
+        editor.putBoolean(fabLearn, var);
+        editor.commit();
+    }
+    public boolean getFabLearn(){
+        return pref.getBoolean(fabLearn, false);
     }
 
  /*   public void setTheme(boolean var){

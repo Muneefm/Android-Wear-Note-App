@@ -10,8 +10,7 @@
     <item
         android:id="@+id/send_ontime"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_watch_white"
-        android:title="send to wear"
-        app:showAsAction="always" />
+        android:title="send Later"
+        app:showAsAction="never" />
 </menu>
 

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import mnf.android.wearnote.ApplicationClass;
 import mnf.android.wearnote.MainActivity;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.R;
@@ -168,7 +169,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             noteModel.remove(position);
 
             notifyItemRemoved(position);
-            MainActivity.syncDatatoWear();
+            ApplicationClass.syncDatatoWear();
         }
     }
 

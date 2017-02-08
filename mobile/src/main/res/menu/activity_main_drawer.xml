@@ -6,14 +6,19 @@
             android:id="@+id/nav_note"
             android:icon="@drawable/ic_nav_note"
             android:title="Notes" />
+
+        <item
+            android:id="@+id/nav_reminder"
+            android:icon="@drawable/ic_reminder_white"
+            android:title="Reminders" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_nav_settings"
             android:title="Settings" />
         <item
-            android:id="@+id/nav_reminder"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Reminders" />
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_nav_settings"
+            android:title="Login" />
       <!--  <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "285587560130",
+    "firebase_url": "https://wear-note-app.firebaseio.com",
+    "project_id": "wear-note-app",
+    "storage_bucket": "wear-note-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285587560130:android:18dfa24a419223a3",
+        "android_client_info": {
+          "package_name": "mnf.android.wearnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285587560130-ltsmtgaupr508u8mgelogvot16pcriva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNYACr9XrJpZjUfmVojqeK_g9u2vOesHU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285587560130-ltsmtgaupr508u8mgelogvot16pcriva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

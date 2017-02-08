@@ -29,7 +29,8 @@ dependencies {
     wearApp project(':wear')
     compile files('libs/gson-2.8.0 .jar')
 
-
+    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.firebaseui:firebase-ui-auth:1.0.1'
 
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.android.support:appcompat-v7:25.1.0'
@@ -44,4 +45,6 @@ dependencies {
     compile 'com.github.florent37:singledateandtimepicker:1.0.4'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
 }
+apply plugin: 'com.google.gms.google-services'

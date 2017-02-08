@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Movie;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
@@ -66,6 +68,7 @@ public class ListNote extends Fragment {
     @BindView(R.id.rc_main)
     RecyclerView recyclerView;
     private RecycleViewAdapter adapter;
+    TextView emptyPlaceholder;
 
     Context c;
     public ListNote() {
@@ -125,6 +128,9 @@ public class ListNote extends Fragment {
         c = getActivity();
         ButterKnife.bind(getActivity());
         recyclerView = (RecyclerView) v.findViewById(R.id.rc_main);
+        emptyPlaceholder = (TextView) v.findViewById(R.id.empty_placeholder);
+        Typeface face=Typeface.createFromAsset(c.getAssets(), "fonts/Cabin-Regular.ttf");
+        emptyPlaceholder.setTypeface(face);
 
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +169,9 @@ public class ListNote extends Fragment {
                 .all()
                 .from(Note.class)
                 .execute();
+        if(list.size()<=0){
+            emptyPlaceholder.setVisibility(View.VISIBLE);
+        }
         adapter = new RecycleViewAdapter(c,list);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());

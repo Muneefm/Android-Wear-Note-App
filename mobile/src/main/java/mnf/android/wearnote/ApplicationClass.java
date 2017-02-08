@@ -73,6 +73,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.e("TAG","ApplicationClass onConnected");
+        syncDatatoWear();
 
     }
 

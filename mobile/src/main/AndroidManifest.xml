@@ -25,13 +25,15 @@
             android:value="note.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="3" />
+            android:value="1" />
 
         <service android:name=".MainActivity" />
 
         <activity
             android:name=".Activity.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            />
         <activity android:name=".Activity.PreferanceActivityNew"></activity>
         <receiver android:name=".tools.Reciever">
 

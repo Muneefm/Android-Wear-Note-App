@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,6 +26,8 @@ import android.widget.EditText;
 import com.activeandroid.DatabaseHelper;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 
 import java.text.DateFormat;
@@ -61,6 +64,9 @@ public class NoteFragment extends Fragment {
     Context context;
     private OnFragmentInteractionListener mListener;
     MobilePreferenceHandler pref;
+    FloatingActionsMenu fabMenu;
+    FloatingActionButton fabSendWear,fabReminder;
+
     public NoteFragment() {
         // Required empty public constructor
     }
@@ -206,11 +212,37 @@ public class NoteFragment extends Fragment {
                         .set("title = "+""+DatabaseUtils.sqlEscapeString(lines[0].trim())+"")
                         .where("idn = ?", mParam1)
                         .execute();
-                MainActivity.syncDatatoWear();
+                ApplicationClass.syncDatatoWear();
             }
         });
 
-    return v;
+
+        fabMenu = (FloatingActionsMenu) v.findViewById(R.id.fab_notefrag);
+        fabSendWear = (FloatingActionButton) v.findViewById(R.id.fab_sentwear);
+        fabReminder = (FloatingActionButton) v.findViewById(R.id.fab_reminder);
+//        fabMenu.addButton(fabSendWear);
+   //     fabMenu.addButton(fabReminder);
+        if(!pref.getFabLearn()){
+            fabMenu.expand();
+            pref.setFabLearn(true);
+        }
+        fabReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDateView();
+               // fabMenu.collapse();
+            }
+        });
+        fabSendWear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendNotification();
+              //  fabMenu.collapse();
+            }
+        });
+
+
+        return v;
     }
 
     public  void openDateView(){
@@ -227,8 +259,17 @@ public class NoteFragment extends Fragment {
                     public void onDateSelected(Date date) {
                     Log.e("TAG","Date selected = "+date);
                         Config.setReminder(date,context,Integer.parseInt(mParam1));
+                         Snackbar.make(edtNote,"Reminder Added ",Snackbar.LENGTH_LONG).show();
                     }
                 }).display();
+    }
+
+    public void  sendNotification(){
+        Note noteGet = new Select()
+                .from(Note.class)
+                .where("idn = ?", mParam1)
+                .executeSingle();
+        new SendNotification(context,noteGet.body,noteGet.getTitle()).sendNotificationWear();
     }
 
 

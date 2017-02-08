@@ -286,6 +286,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Log.e("TAG","PhonePreferenceFragment onCreate");
             bindPreferenceSummaryToValue(findPreference("fontsize_list_mobile"));
             bindPreferenceSummaryToValue(findPreference("font_style_mobile"));
+
             fontStyle = (ListPreference) findPreference("font_style_mobile");
             fontSize = (ListPreference) findPreference("fontsize_list_mobile");
 

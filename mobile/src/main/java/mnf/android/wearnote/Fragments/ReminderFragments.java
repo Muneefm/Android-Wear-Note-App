@@ -1,6 +1,7 @@
 package mnf.android.wearnote.Fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mnf.android.wearnote.Adapters.RecycleViewAdapter;
 import mnf.android.wearnote.Adapters.RecycleViewReminderAdapter;
 import mnf.android.wearnote.Config;
+import mnf.android.wearnote.Model.ReminderModel;
 import mnf.android.wearnote.R;
+import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.SimpleDividerItemDecoration;
 
 /**
@@ -36,6 +43,7 @@ public class ReminderFragments extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    TextView emptyPlaceholderRm;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,6 +82,7 @@ public class ReminderFragments extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    MobilePreferenceHandler pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,9 +90,17 @@ public class ReminderFragments extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_reminder_fragments, container, false);
         //ButterKnife.bind(getActivity());
+        getActivity().setTitle("Reminders");
         recyclerView = (RecyclerView) v.findViewById(R.id.rc_reminder);
+        emptyPlaceholderRm = (TextView) v.findViewById(R.id.empty_placeholder_rm);
+        Typeface face=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Cabin-Regular.ttf");
+        emptyPlaceholderRm.setTypeface(face);
 
-        adapter = new RecycleViewReminderAdapter(getActivity(), Config.getReminderList());
+        List<ReminderModel> listItems = Config.getReminderList();
+        if(listItems.size()<=0){
+            emptyPlaceholderRm.setVisibility(View.VISIBLE);
+        }
+        adapter = new RecycleViewReminderAdapter(getActivity(), listItems);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);

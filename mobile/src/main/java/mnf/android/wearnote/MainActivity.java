@@ -19,8 +19,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -31,10 +33,13 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
 
 import mnf.android.wearnote.Activity.SettingsActivity;
@@ -45,15 +50,16 @@ import mnf.android.wearnote.Model.NoteJson;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,DataApi.DataListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
     private static GoogleApiClient mGoogleApiClient;
     FragmentManager fManager;
     private static final String COUNT_KEY = "count";
     private int count = 0;
 
     static Context c;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mFirebaseAuthStateListener;
+    private static final int RC_SIGN_IN = 1;
 
 
     @Override
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         c =this;
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,16 +81,57 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
 
 
+        mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if(user != null){
+                    //user logged in
+                    Log.v("TAG","user logged in ");
+                    Toast.makeText(c,"User successfully logged in",Toast.LENGTH_LONG).show();
+                    //  attachView(user.getDisplayName());
+                }else{
+                    Log.v("TAG","user logged out ");
+                    //user logged out
+                    //  dettachView();
+
+                   /* startActivityForResult(
+                            // Get an instance of AuthUI based on the default app
+                            AuthUI.getInstance().createSignInIntentBuilder().build(),
+                            RC_SIGN_IN);*/
+                }
+
+            }
+        };
+
+    }
+
+
+    public void openauthenticationView(){
+
+
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setIsSmartLockEnabled(false)
+                        .setProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+
+                        .build(),
+                RC_SIGN_IN);
+
+
+
+
+
     }
 
 
@@ -91,42 +139,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-    Log.e("TAG","onConnected");
-      //  syncData();
-      //  putWearData();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("TAG","onConnectionFailed");
-
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
-        Log.e("TAG","onDataChanged");
-
-    }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mGoogleApiClient.connect();
+     //   mGoogleApiClient.connect();
+        mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
+
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mGoogleApiClient.disconnect();
+//        mGoogleApiClient.disconnect();
 
     }
 
@@ -138,7 +165,7 @@ public class MainActivity extends AppCompatActivity
                 Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
     }
 
-    public static void syncDatatoWear(){
+   /* public static void syncDatatoWear(){
         Log.e("TAG","syncing data to wear");
         List<Note> notes =new Select()
                 .all()
@@ -157,7 +184,7 @@ public class MainActivity extends AppCompatActivity
       //  map.putInt("color", Color.RED);
         map.putString("database", json);
         Wearable.DataApi.putDataItem(mGoogleApiClient,  putRequest.asPutDataRequest());
-    }
+    }*/
 
     public static void syncPrefToWear(){
         WearPreferenceHandler pref =new WearPreferenceHandler(c);
@@ -228,6 +255,8 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.nav_reminder){
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ReminderFragments().newInstance("","")).commit();
 
+        }else if(id == R.id.nav_login){
+            openauthenticationView();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

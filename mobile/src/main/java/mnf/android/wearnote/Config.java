@@ -72,10 +72,21 @@ public class Config {
     }
 
     public static List<ReminderModel> getReminderList(){
+        List<ReminderModel> listReminder = new Select()
+                .all()
+                .from(ReminderModel.class)
+                .execute();
+        Date now = new Date();
+        for (ReminderModel model: listReminder) {
+            if(model.getDate().before(now)){
+                model.delete();
+            }
+        }
         return new Select()
                 .all()
                 .from(ReminderModel.class)
                 .execute();
+
     }
 
 
