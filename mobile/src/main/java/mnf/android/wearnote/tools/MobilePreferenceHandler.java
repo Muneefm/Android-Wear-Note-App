@@ -25,6 +25,7 @@ public class MobilePreferenceHandler {
     final String fontStylem="font_style_m";
 
     final String fabLearn="fab_learn";
+    final String firstTimeOpen="first_time_open";
 
 
 
@@ -63,6 +64,17 @@ public class MobilePreferenceHandler {
     public boolean getFabLearn(){
         return pref.getBoolean(fabLearn, false);
     }
+
+
+    public void setFirstTimeOpen(boolean var){
+        Log.e("TAG","setFontStyle Set"+var );
+        editor.putBoolean(firstTimeOpen, var);
+        editor.commit();
+    }
+    public boolean getFirstTimeOpen(){
+        return pref.getBoolean(firstTimeOpen, true);
+    }
+
 
  /*   public void setTheme(boolean var){
         Log.e("TAG","setTheme Set"+var );

@@ -71,6 +71,17 @@ public class Config {
                 .executeSingle();
     }
 
+    public static List<Note> getNoteList(){
+
+        return new Select()
+                .all()
+                .from(Note.class)
+                .execute();
+
+    }
+
+
+
     public static List<ReminderModel> getReminderList(){
         List<ReminderModel> listReminder = new Select()
                 .all()

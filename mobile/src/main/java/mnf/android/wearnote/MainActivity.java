@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity
 
                 if(user != null){
                     //user logged in
-                    Log.v("TAG","user logged in ");
+                    Log.e("TAG","user logged in ");
                     Toast.makeText(c,"User successfully logged in",Toast.LENGTH_LONG).show();
                     //  attachView(user.getDisplayName());
                 }else{
-                    Log.v("TAG","user logged out ");
+                    Log.e("TAG","user logged out ");
                     //user logged out
                     //  dettachView();
 
@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         };
+        mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
+
 
     }
 
@@ -121,9 +123,12 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
+                        .setTheme(R.style.LoginTheme)
+
                         .setIsSmartLockEnabled(false)
-                        .setProviders(Arrays.asList(
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                        .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
+                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())  //new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
+                                )
 
                         .build(),
                 RC_SIGN_IN);
@@ -132,6 +137,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
+
+    public void logoutUser(){
+        AuthUI.getInstance()
+                .signOut(this);
     }
 
 
@@ -145,7 +155,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
      //   mGoogleApiClient.connect();
-        mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
 
 
     }
@@ -257,6 +266,8 @@ public class MainActivity extends AppCompatActivity
 
         }else if(id == R.id.nav_login){
             openauthenticationView();
+        }else if(id == R.id.nav_logout){
+            logoutUser();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
