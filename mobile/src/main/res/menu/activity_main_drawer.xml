@@ -15,14 +15,7 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_nav_settings"
             android:title="Settings" />
-        <item
-            android:id="@+id/nav_login"
-            android:icon="@drawable/ic_nav_settings"
-            android:title="Login" />
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_nav_settings"
-            android:title="Logout" />
+
       <!--  <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -32,18 +25,17 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />-->
     </group>
-
-    <!--<item android:title="Communicate">
+    <item android:title="Account">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_nav_settings"
+                android:title="Login" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_nav_settings"
+                android:title="Logout" />
         </menu>
-    </item> -->
+    </item>
 
 </menu>

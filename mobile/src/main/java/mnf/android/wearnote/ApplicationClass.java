@@ -61,7 +61,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     private static FirebaseStorage mFirebaseStorage;
     private static StorageReference mStorageReferance;
     private FirebaseAuth mFirebaseAuth;
-    MobilePreferenceHandler pref;
+    static MobilePreferenceHandler pref;
     public static String DB_PATH = "/data/data/mnf.android.wearnote/databases/note.db";
    static  boolean oldContain = false;
     static List<Note> oldnNoteItems;
@@ -89,10 +89,10 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user!=null){
-          //  backupDsToFirebase();
+            backupDbToFirebase();
 
             if(pref.getFirstTimeOpen()){
-                restoreBackupDb();
+                //restoreBackupDb();
             }
             Log.e("TAG","Application class user logged in ");
         }else{
@@ -112,6 +112,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         if(oldnNoteItems.size()>0){
             oldContain = true;
         }
+        Log.e("TAG","Application class restoreBackupDb oldContain = "+oldContain);
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -119,7 +120,9 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
             String id = user.getUid();
             mFirebaseStorage = FirebaseStorage.getInstance();
             mStorageReferance = mFirebaseStorage.getReference().child("Database");
-             mStorageReferance.child(id).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            StorageReference idFolder = mStorageReferance.child(id);
+
+            idFolder.child(id).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Log.e("TAG","Application db download success  ");
@@ -142,12 +145,13 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
             fileOuputStream.write(bFile);
             if(oldContain){
                 populateOldNotes();
+            }else{
+                refreshNoteAdapter();
+                pref.setFirstTimeOpen(false);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void populateOldNotes(){
@@ -156,12 +160,14 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
             if(Config.getNoteList()!=null) {
                 List<Note> newItems = Config.getNoteList();
                 int newCount = newItems.size();
-                Log.e("TAG","Application populateOldNotes  newCount = "+newCount);
+                Log.e("TAG","Application populateOldNotes  newCount = "+newCount+" old note size = "+oldnNoteItems.size());
                 int key =0;
                 for (Note oldNoteItem : oldnNoteItems) {
                     key =0;
                     for (Note newNoteItem: newItems) {
                         if(newNoteItem.getIdn()!=oldNoteItem.getIdn()){
+                            Log.e("TAG","Application loop  new idn = "+newNoteItem.getIdn()+" title "+newNoteItem.getTitle()+" old idn = "+oldNoteItem.getIdn()+" title = "+oldNoteItem.getTitle());
+
                             key++;
                         }
                     }
@@ -183,7 +189,12 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 }
             }
         }
+        refreshNoteAdapter();
+        pref.setFirstTimeOpen(false);
+    }
 
+    public static void refreshNoteAdapter(){
+            ListNote.addAdapterItems();
     }
 
 
@@ -193,8 +204,8 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     }
 
 
-    public static void backupDsToFirebase(){
-        Log.e("TAG","Application setUpStorageRefs ");
+    public static void backupDbToFirebase(){
+        Log.e("TAG","Application backupDbToFirebase  ");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null) {
@@ -202,9 +213,11 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 String id = user.getUid();
                 mFirebaseStorage = FirebaseStorage.getInstance();
                 mStorageReferance = mFirebaseStorage.getReference().child("Database");
+                StorageReference idFolder = mStorageReferance.child(id);
+                StorageReference refUser = idFolder.child(id);
+                Log.e("TAG","Application backupDbToFirebase  url = "+refUser.getPath());
 
-                StorageReference refUser = mStorageReferance.child(id);
-                refUser.putFile(Uri.fromFile(getDbFile())).addOnSuccessListener((Activity) c, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                refUser.putFile(Uri.fromFile(getDbFile())).addOnSuccessListener( new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Log.e("TAG","Application db upload success  ");

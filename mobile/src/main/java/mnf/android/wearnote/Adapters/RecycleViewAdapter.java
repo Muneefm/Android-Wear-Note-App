@@ -48,6 +48,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         this.noteModel = models;
         itemsPendingRemoval = new ArrayList<>();
     }
+    public void addItems(List<Note> items){
+        this.noteModel = items;
+        notifyDataSetChanged();
+        Log.e("Tag","on Add Items ");
+    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mFirebaseAuthStateListener;
     private static final int RC_SIGN_IN = 1;
-
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +77,17 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
 
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
-
-
         mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -94,10 +95,14 @@ public class MainActivity extends AppCompatActivity
 
                 if(user != null){
                     //user logged in
+                    setAccountVisibility(true);
                     Log.e("TAG","user logged in ");
-                    Toast.makeText(c,"User successfully logged in",Toast.LENGTH_LONG).show();
+                    Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
+                    ApplicationClass.restoreBackupDb();
                     //  attachView(user.getDisplayName());
                 }else{
+                    setAccountVisibility(false);
+
                     Log.e("TAG","user logged out ");
                     //user logged out
                     //  dettachView();
@@ -111,15 +116,29 @@ public class MainActivity extends AppCompatActivity
             }
         };
         mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
+    }
 
+
+    public void setAccountVisibility(boolean loggedIn){
+        MenuItem menuLogout = navigationView.getMenu().findItem(R.id.nav_logout);
+        MenuItem menuLogin = navigationView.getMenu().findItem(R.id.nav_login);
+        if(loggedIn){
+            menuLogin.setVisible(false);
+            menuLogout.setVisible(true);
+
+        }else{
+            menuLogin.setVisible(true);
+            menuLogout.setVisible(false);
+
+
+        }
 
     }
 
 
+
+
     public void openauthenticationView(){
-
-
-
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -252,6 +271,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_note) {

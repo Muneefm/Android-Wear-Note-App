@@ -246,8 +246,6 @@ public class NoteFragment extends Fragment {
     }
 
     public  void openDateView(){
-
-
         new SingleDateAndTimePickerDialog.Builder(context)
                 .bottomSheet()
                 .curved()
@@ -284,6 +282,7 @@ public class NoteFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
 
     }
 

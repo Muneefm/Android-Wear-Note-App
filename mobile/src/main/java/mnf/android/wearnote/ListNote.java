@@ -67,8 +67,8 @@ public class ListNote extends Fragment {
 
     @BindView(R.id.rc_main)
     RecyclerView recyclerView;
-    private RecycleViewAdapter adapter;
-    TextView emptyPlaceholder;
+    private static RecycleViewAdapter adapter;
+    static TextView emptyPlaceholder;
 
     Context c;
     public ListNote() {
@@ -202,6 +202,16 @@ public class ListNote extends Fragment {
         return v;
     }
 
+    public static void addAdapterItems(){
+        List<Note> items = Config.getNoteList();
+        if(items.size()>0){
+            emptyPlaceholder.setVisibility(View.INVISIBLE);
+        }else{
+            emptyPlaceholder.setVisibility(View.VISIBLE);
+        }
+        adapter.addItems(Config.getNoteList());
+
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
