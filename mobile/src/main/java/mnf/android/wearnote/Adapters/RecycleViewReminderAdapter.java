@@ -72,7 +72,7 @@ public class RecycleViewReminderAdapter extends RecyclerView.Adapter<RecycleView
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         ReminderModel model = mDataset.get(position);
-        final Integer id = model.getIdn();
+        final String id = model.getIdn();
         Date date = model.getDate();
 
         holder.date.setText(DateFormat.getDateTimeInstance().format(date));

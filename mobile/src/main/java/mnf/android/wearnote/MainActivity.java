@@ -98,8 +98,10 @@ public class MainActivity extends AppCompatActivity
                     setAccountVisibility(true);
                     Log.e("TAG","user logged in ");
                     Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
-                    ApplicationClass.restoreBackupDb();
+                   // ApplicationClass.backupDbToFirebase();
                     //  attachView(user.getDisplayName());
+                     ApplicationClass.restoreBackupDb();
+
                 }else{
                     setAccountVisibility(false);
 
@@ -112,7 +114,6 @@ public class MainActivity extends AppCompatActivity
                             AuthUI.getInstance().createSignInIntentBuilder().build(),
                             RC_SIGN_IN);*/
                 }
-
             }
         };
         mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);

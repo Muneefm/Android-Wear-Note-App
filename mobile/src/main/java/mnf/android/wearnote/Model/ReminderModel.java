@@ -13,10 +13,10 @@ import java.util.Date;
 @Table(name = "reminder")
 public class ReminderModel extends Model {
     @Column(name ="idn")
-    public Integer idn;
+    public String idn;
 
     @Column(name ="noteid")
-    public Integer noteid;
+    public String noteid;
 
     @Column(name ="date")
     public Date date;
@@ -33,7 +33,7 @@ public class ReminderModel extends Model {
     public ReminderModel() {
     }
 
-    public ReminderModel(Integer id, Integer noteid, Date date, String title, String body) {
+    public ReminderModel(String id, String noteid, Date date, String title, String body) {
      //   this.title = title;
         this.idn = id;
      //   this.body = body;
@@ -50,11 +50,11 @@ public class ReminderModel extends Model {
         this.title = title;
     }
 */
-    public Integer getIdn() {
+    public String getIdn() {
         return idn;
     }
 
-    public void setIdn(Integer id) {
+    public void setIdn(String id) {
         this.idn = id;
     }
 
@@ -74,11 +74,11 @@ public class ReminderModel extends Model {
         this.date = date;
     }
 
-    public void setNoteid(Integer noteid){
+    public void setNoteid(String noteid){
         this.noteid = noteid;
     }
 
-    public Integer getNoteid(){
+    public String getNoteid(){
         return this.noteid;
     }
 

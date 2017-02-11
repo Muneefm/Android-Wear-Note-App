@@ -256,7 +256,7 @@ public class NoteFragment extends Fragment {
                     @Override
                     public void onDateSelected(Date date) {
                     Log.e("TAG","Date selected = "+date);
-                        Config.setReminder(date,context,Integer.parseInt(mParam1));
+                        Config.setReminder(date,context,mParam1);
                          Snackbar.make(edtNote,"Reminder Added ",Snackbar.LENGTH_LONG).show();
                     }
                 }).display();

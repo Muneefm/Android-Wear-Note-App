@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Cache;
 import com.activeandroid.query.Select;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -64,7 +65,8 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     static MobilePreferenceHandler pref;
     public static String DB_PATH = "/data/data/mnf.android.wearnote/databases/note.db";
    static  boolean oldContain = false;
-    static List<Note> oldnNoteItems;
+    static int ii;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -85,11 +87,11 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(user!=null){
-            backupDbToFirebase();
+           // backupDbToFirebase();
+           // restoreBackupDb();
 
             if(pref.getFirstTimeOpen()){
                 //restoreBackupDb();
@@ -108,7 +110,16 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
 
     public static void restoreBackupDb(){
         Log.e("TAG","Application class restoreBackupDb");
-        oldnNoteItems = Config.getNoteList();
+        ii = Config.getExample();
+         final List<Note> oldnNoteItems = new Select()
+                .all()
+                .from(Note.class)
+                .execute();
+
+        for (Note itm : oldnNoteItems) {
+            Log.e("TAG","Application class oldnNoteItems  old idn = "+itm.getIdn()+" title = "+itm.getTitle());
+
+        }
         if(oldnNoteItems.size()>0){
             oldContain = true;
         }
@@ -126,7 +137,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Log.e("TAG","Application db download success  ");
-                    writeBytesToFile(bytes,DB_PATH);
+                    writeBytesToFile(bytes,DB_PATH,oldnNoteItems);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                  @Override
@@ -138,13 +149,13 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         }
     }
 
-    private static void writeBytesToFile(byte[] bFile, String fileDest) {
+    private static void writeBytesToFile(byte[] bFile, String fileDest,List<Note> oldItem) {
         Log.e("TAG","Application db writeBytesToFile  ");
 
         try (FileOutputStream fileOuputStream = new FileOutputStream(fileDest)) {
             fileOuputStream.write(bFile);
             if(oldContain){
-                populateOldNotes();
+                populateOldNotes(oldItem);
             }else{
                 refreshNoteAdapter();
                 pref.setFirstTimeOpen(false);
@@ -154,21 +165,57 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         }
     }
 
-    public static void populateOldNotes(){
 
-        if(oldnNoteItems!=null){
-            if(Config.getNoteList()!=null) {
-                List<Note> newItems = Config.getNoteList();
+    /*public static void popOldNote(){
+        for (Note itm1 : oldnNoteItems) {
+            Log.e("TAG","Application populateOldNotes function start ---  old idn = "+itm1.getIdn()+" title = "+itm1.getTitle());
+        }
+        List<Note> oldIt = oldnNoteItems;
+        for (Note itm3 : oldIt) {
+            Log.e("TAG","Application populateOldNotes function start ---  old idn = "+itm3.getIdn()+" title = "+itm3.getTitle());
+        }
+         newItems = new Config().getNoteList();
+        for (Note itm2 : oldnNoteItems) {
+            Log.e("TAG","Application populateOldNotes function start ---  old idn = "+itm2.getIdn()+" title = "+itm2.getTitle());
+        }
+        for (Note itm3 : oldIt) {
+            Log.e("TAG","Application populateOldNotes function start ---  old idn = "+itm3.getIdn()+" title = "+itm3.getTitle());
+        }
+    }
+
+*/
+
+
+    public static void populateOldNotes(List<Note> oldnNoteItemsAll){
+       // Log.e("TAG","Application class populateOldNotes function start old ii  = "+ii);
+      //  int i = Config.getExample();
+     //   Log.e("TAG","Application class populateOldNotes after old ii  = "+ii+" i ="+i);
+       // oldItems = oldnNoteItems;
+       for (Note itm : oldnNoteItemsAll) {
+            Log.e("TAG","Application class populateOldNotes function start old idn = "+itm.getIdn()+" title = "+itm.getTitle());
+
+        }
+       // Cache.removeEntity(yourModel);
+        Cache.clear();
+        if(oldnNoteItemsAll!=null){
+            List<Note> newItems = new Select()
+                    .all()
+                    .from(Note.class)
+                    .execute();
+            if(newItems!=null) {  // no problem
                 int newCount = newItems.size();
-                Log.e("TAG","Application populateOldNotes  newCount = "+newCount+" old note size = "+oldnNoteItems.size());
+                Log.e("TAG","Application populateOldNotes  newCount = "+newCount+" old note size = "+oldnNoteItemsAll.size());
                 int key =0;
-                for (Note oldNoteItem : oldnNoteItems) {
+                for (Note itm : oldnNoteItemsAll) {
+                    Log.e("TAG","Application class beforeLoop  old idn = "+itm.getIdn()+" title = "+itm.getTitle());
+                }
+                for (Note oldNoteItem : oldnNoteItemsAll) {
                     key =0;
                     for (Note newNoteItem: newItems) {
+                        Log.e("TAG","Application loop  new idn = "+newNoteItem.getIdn()+" title "+newNoteItem.getTitle()+" old idn = "+oldNoteItem.getIdn()+" title = "+oldNoteItem.getTitle());
                         if(newNoteItem.getIdn()!=oldNoteItem.getIdn()){
-                            Log.e("TAG","Application loop  new idn = "+newNoteItem.getIdn()+" title "+newNoteItem.getTitle()+" old idn = "+oldNoteItem.getIdn()+" title = "+oldNoteItem.getTitle());
-
                             key++;
+                            Log.e("TAG","Application loop  k = "+key);
                         }
                     }
                     Log.e("TAG","Application populateOldNotes  inner loop over key  = "+key);
@@ -293,7 +340,6 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     public static void syncPrefToWear(WearPreferenceHandler prefVar){
         WearPreferenceHandler pref =prefVar;
         Log.e("TAG"," ApplicationClass syncing Preference to wear f_size = "+pref.getFontSize()+" theme = "+pref.getTheme());
-
         final PutDataMapRequest putRequestPref = PutDataMapRequest.create("/pref");
         final DataMap mapPref = putRequestPref.getDataMap();
         mapPref.putString("font_size", pref.getFontSize());

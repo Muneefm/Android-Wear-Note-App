@@ -138,7 +138,8 @@ public class ListNote extends Fragment {
             public void onClick(View view) {
                 Snackbar.make(view, "New note opened", Snackbar.LENGTH_LONG)
                      .show();
-                int newIdn = Config.generateRandomNumberGenerate();
+                String newIdn = Config.generateRandomNumberGenerate();
+                Log.e("TAG","new rand = "+newIdn);
                 Note note = new Note();
                 note.idn = newIdn;
                 note.title = "";
@@ -203,14 +204,14 @@ public class ListNote extends Fragment {
     }
 
     public static void addAdapterItems(){
-        List<Note> items = Config.getNoteList();
+     /*   List<Note> items = Config.getNoteList();
         if(items.size()>0){
             emptyPlaceholder.setVisibility(View.INVISIBLE);
         }else{
             emptyPlaceholder.setVisibility(View.VISIBLE);
         }
         adapter.addItems(Config.getNoteList());
-
+*/
     }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

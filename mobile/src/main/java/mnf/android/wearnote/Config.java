@@ -4,12 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.ReminderModel;
@@ -24,26 +26,32 @@ import static android.content.Context.ALARM_SERVICE;
 public class Config {
    static int min = 1000;
     static int max = 999999999;
-    public static int generateRandomNumberGenerate(){
-        Random r = new Random();
+    static int i =0;
+    public static String generateRandomNumberGenerate(){
+       /* Random r = new Random();
         int ran = r.nextInt(max - min + 1) + min;
-
+*/
+        String uniqueID = getUUID();
         List<Note> notes =new Select()
                 .all()
                 .from(Note.class)
                 .execute();
         if (notes!=null&&notes.size()!=0)
         for (Note note: notes) {
-            if (note.idn==ran){
+            if (note.idn.equals(uniqueID)){
                 generateRandomNumberGenerate();
             }
         }
-        return ran;
+        return uniqueID;
     }
 
-    public static int generateRandomNumberReminder(){
-        Random r = new Random();
-        int ran = r.nextInt(max - min + 1) + min;
+    public static String getUUID(){
+        return   UUID.randomUUID().toString();
+
+    }
+
+    public static String generateRandomNumberReminder(){
+        String uniqueIDRem = getUUID();
 
         List<ReminderModel> reminderModelList =new Select()
                 .all()
@@ -51,11 +59,11 @@ public class Config {
                 .execute();
         if (reminderModelList!=null&&reminderModelList.size()!=0)
             for (ReminderModel reminderModel: reminderModelList) {
-                if (reminderModel.idn==ran){
+                if (reminderModel.idn.equals(uniqueIDRem)){
                     generateRandomNumberGenerate();
                 }
             }
-        return ran;
+        return uniqueIDRem;
     }
     public static int generateRandomInt(){
         Random r = new Random();
@@ -64,20 +72,32 @@ public class Config {
     }
 
 
-    public static Note getNoteItem(Integer id){
+    public static Note getNoteItem(String id){
         return new Select()
                 .from(Note.class)
-                .where("idn = ?", id)
+                .where("idn = ?", "'"+id+"'")
                 .executeSingle();
     }
 
-    public static List<Note> getNoteList(){
-
-        return new Select()
+    public  List<Note> getNoteList(){
+        Log.e("TAG","Config  function call" );
+        List<Note> ret = new Select()
                 .all()
                 .from(Note.class)
                 .execute();
 
+        for (Note itm : ret) {
+            Log.e("TAG","Config  class getNoteList   idn = "+itm.getIdn()+" title = "+itm.getTitle());
+
+        }
+        return ret;
+
+    }
+
+    public static int getExample(){
+        i++;
+        Log.e("tag","return value example = "+i);
+        return i;
     }
 
 
@@ -102,8 +122,8 @@ public class Config {
 
 
 
-    public static void setReminder(Date date, Context context,Integer noteid){
-        int idReminder = generateRandomNumberReminder();
+    public static void setReminder(Date date, Context context,String noteid){
+        String idReminder = generateRandomNumberReminder();
         Intent intent = new Intent(context, Reciever.class);
         intent.putExtra("noteid",noteid);
         intent.putExtra("reminderid",idReminder);

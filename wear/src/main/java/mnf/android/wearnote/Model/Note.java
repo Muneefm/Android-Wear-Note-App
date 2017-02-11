@@ -10,7 +10,7 @@ import com.activeandroid.annotation.Table;
 @Table(name = "note")
 public class Note extends TruncatableModel {
     @Column(name ="idn")
-    public Integer idn;
+    public String idn;
     @Column(name ="title")
     public String title;
     @Column(name ="body")
@@ -21,7 +21,7 @@ public class Note extends TruncatableModel {
     public Note() {
     }
 
-    public Note(Integer id, String title, String body) {
+    public Note(String id, String title, String body) {
         this.title = title;
         this.idn = id;
         this.body = body;
@@ -35,11 +35,11 @@ public class Note extends TruncatableModel {
         this.title = title;
     }
 
-    public Integer getIdn() {
+    public String getIdn() {
         return idn;
     }
 
-    public void setIdn(Integer id) {
+    public void setIdn(String id) {
         this.idn = id;
     }
 
