@@ -204,14 +204,14 @@ public class ListNote extends Fragment {
     }
 
     public static void addAdapterItems(){
-     /*   List<Note> items = Config.getNoteList();
+        List<Note> items = Config.getNoteList();
         if(items.size()>0){
             emptyPlaceholder.setVisibility(View.INVISIBLE);
         }else{
             emptyPlaceholder.setVisibility(View.VISIBLE);
         }
         adapter.addItems(Config.getNoteList());
-*/
+
     }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

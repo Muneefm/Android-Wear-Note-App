@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                         .setTheme(R.style.LoginTheme)
 
                         .setIsSmartLockEnabled(false)
-                        .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
+                        .setProviders(Arrays.asList(
                                 new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())  //new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
                                 )
 

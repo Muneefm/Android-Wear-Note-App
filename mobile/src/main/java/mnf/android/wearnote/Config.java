@@ -79,7 +79,7 @@ public class Config {
                 .executeSingle();
     }
 
-    public  List<Note> getNoteList(){
+    public static  List<Note> getNoteList(){
         Log.e("TAG","Config  function call" );
         List<Note> ret = new Select()
                 .all()

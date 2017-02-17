@@ -110,11 +110,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
 
     public static void restoreBackupDb(){
         Log.e("TAG","Application class restoreBackupDb");
-        ii = Config.getExample();
-         final List<Note> oldnNoteItems = new Select()
-                .all()
-                .from(Note.class)
-                .execute();
+         final List<Note> oldnNoteItems = Config.getNoteList();
 
         for (Note itm : oldnNoteItems) {
             Log.e("TAG","Application class oldnNoteItems  old idn = "+itm.getIdn()+" title = "+itm.getTitle());
@@ -148,6 +144,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
              });
         }
     }
+
 
     private static void writeBytesToFile(byte[] bFile, String fileDest,List<Note> oldItem) {
         Log.e("TAG","Application db writeBytesToFile  ");
@@ -198,10 +195,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
        // Cache.removeEntity(yourModel);
         Cache.clear();
         if(oldnNoteItemsAll!=null){
-            List<Note> newItems = new Select()
-                    .all()
-                    .from(Note.class)
-                    .execute();
+            List<Note> newItems = Config.getNoteList();
             if(newItems!=null) {  // no problem
                 int newCount = newItems.size();
                 Log.e("TAG","Application populateOldNotes  newCount = "+newCount+" old note size = "+oldnNoteItemsAll.size());
@@ -213,7 +207,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                     key =0;
                     for (Note newNoteItem: newItems) {
                         Log.e("TAG","Application loop  new idn = "+newNoteItem.getIdn()+" title "+newNoteItem.getTitle()+" old idn = "+oldNoteItem.getIdn()+" title = "+oldNoteItem.getTitle());
-                        if(newNoteItem.getIdn()!=oldNoteItem.getIdn()){
+                        if(!newNoteItem.getIdn().equals(oldNoteItem.getIdn())){
                             key++;
                             Log.e("TAG","Application loop  k = "+key);
                         }
