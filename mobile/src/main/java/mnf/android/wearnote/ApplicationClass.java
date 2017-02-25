@@ -41,6 +41,8 @@ import java.util.List;
 
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
+import mnf.android.wearnote.callbacks.AdapterItemUpdate;
+import mnf.android.wearnote.callbacks.DbBackupCallback;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
@@ -66,6 +68,9 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     public static String DB_PATH = "/data/data/mnf.android.wearnote/databases/note.db";
    static  boolean oldContain = false;
     static int ii;
+    static DbBackupCallback mListenerDb;
+    static AdapterItemUpdate mListenerAdapter;
+
 
     @Override
     public void onCreate() {
@@ -100,12 +105,33 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         }else{
             Log.e("TAG","Application class user logged out ");
         }
+        syncDatatoWear();
+        syncPrefToWear(new WearPreferenceHandler(getInstance()));
     }
+
 
     public Context getInstance(){
         this.c = this;
         return c;
     }
+
+    public void setBackupDbListener(DbBackupCallback eventListener) {
+        this.mListenerDb=eventListener;
+    }
+    public void setAdapterItemListener(AdapterItemUpdate eventListener) {
+        this.mListenerAdapter=eventListener;
+    }
+
+
+    public boolean isUserLoggedin(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 
     public static void restoreBackupDb(){
@@ -232,10 +258,14 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         }
         refreshNoteAdapter();
         pref.setFirstTimeOpen(false);
+        backupDbToFirebase();
     }
 
     public static void refreshNoteAdapter(){
-            ListNote.addAdapterItems();
+        if(mListenerAdapter!=null){
+            mListenerAdapter.itemUpdated();
+        }
+           // ListNote.addAdapterItems();
     }
 
 
@@ -262,13 +292,31 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Log.e("TAG","Application db upload success  ");
+                        if(mListenerDb!=null)
+                        mListenerDb.DbBackupDone();
 
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("TAG","Application db upload failure  ");
+                        if(mListenerDb!=null)
+                            mListenerDb.DbBackupFailed();
                     }
                 });
                 Log.e("TAG","Application db uri =  "+Uri.fromFile(getDbFile()));
 
+            }else{
+                Log.e("TAG","user uid is null  ");
+                if(mListenerDb!=null)
+                    mListenerDb.DbBackupFailed();
             }
 
+        }else{
+            Log.e("TAG","user not logged in  ");
+
+            if(mListenerDb!=null)
+                mListenerDb.DbBackupFailed();
         }
 
     }

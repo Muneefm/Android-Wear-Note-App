@@ -22,5 +22,7 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("mnf.android.wearnote", appContext.getPackageName());
+
+        Config.getNoteItem("d9cd02fd-28a3-4a74-95b1-204c38d5a857");
     }
 }

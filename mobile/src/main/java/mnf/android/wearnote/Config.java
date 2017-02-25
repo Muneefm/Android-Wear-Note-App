@@ -4,9 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.activeandroid.Cache;
 import com.activeandroid.query.Select;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -75,7 +80,7 @@ public class Config {
     public static Note getNoteItem(String id){
         return new Select()
                 .from(Note.class)
-                .where("idn = ?", "'"+id+"'")
+                .where("idn = ?", id)
                 .executeSingle();
     }
 
@@ -113,6 +118,7 @@ public class Config {
                 model.delete();
             }
         }
+        Cache.clear();
         return new Select()
                 .all()
                 .from(ReminderModel.class)
@@ -123,6 +129,7 @@ public class Config {
 
 
     public static void setReminder(Date date, Context context,String noteid){
+        Log.e("Config","note id = "+noteid);
         String idReminder = generateRandomNumberReminder();
         Intent intent = new Intent(context, Reciever.class);
         intent.putExtra("noteid",noteid);
@@ -138,9 +145,18 @@ public class Config {
         reminderModel.setDate(date);
         reminderModel.setNoteid(noteid);
         reminderModel.setStatus(1);
+       // reminderModel.setTitle();
         reminderModel.save();
+        Log.e("Config","reminder saved id = "+idReminder);
+
     }
 
+
+    public static void loadImage(String url, ImageView imageView){
+        Picasso.with(imageView.getContext())
+                .load(url)
+                .into( imageView);
+    }
 
 
 

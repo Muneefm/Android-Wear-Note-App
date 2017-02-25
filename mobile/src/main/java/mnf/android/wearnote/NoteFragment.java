@@ -279,6 +279,8 @@ public class NoteFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -290,6 +292,8 @@ public class NoteFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        ApplicationClass.backupDbToFirebase();
+        Log.e("TAG","onDetach backupDbToFirebase ");
     }
 
     @Override

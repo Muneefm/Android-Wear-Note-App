@@ -75,9 +75,13 @@ public class RecycleViewReminderAdapter extends RecyclerView.Adapter<RecycleView
         final String id = model.getIdn();
         Date date = model.getDate();
 
-        holder.date.setText(DateFormat.getDateTimeInstance().format(date));
+        holder.date.setText(DateFormat.getTimeInstance().format(date));
         Note notItem = Config.getNoteItem(model.getNoteid());
-        holder.title.setText(notItem.getTitle());
+        List<Note> notes = Config.getNoteList();
+        Log.e("adapter", "size = " + notes.size());
+        if(notItem!=null) {
+            holder.title.setText(notItem.getTitle());
+        }
         if(model.getStatus()==1){
             holder.switchRm.setChecked(true);
         }else{

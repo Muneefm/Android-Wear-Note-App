@@ -4,6 +4,15 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+        android:icon="@drawable/ic_settings_padd"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_backup_db"
+        android:orderInCategory="99"
+        android:title="Backup"
+        android:icon="@drawable/ic_backup_padd"
+        app:showAsAction="always" />
+
 </menu>

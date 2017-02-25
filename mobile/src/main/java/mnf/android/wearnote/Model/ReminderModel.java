@@ -24,6 +24,8 @@ public class ReminderModel extends Model {
     @Column(name ="status")
     public int status;
 
+
+
   /*  @Column(name ="body")
     public String body;
 

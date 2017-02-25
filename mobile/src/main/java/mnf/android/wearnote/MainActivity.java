@@ -19,9 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,6 +50,7 @@ import mnf.android.wearnote.Fragments.ReminderFragments;
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
+import mnf.android.wearnote.callbacks.DbBackupCallback;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class MainActivity extends AppCompatActivity
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener mFirebaseAuthStateListener;
     private static final int RC_SIGN_IN = 1;
     NavigationView navigationView;
+    static MaterialDialog loadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         c =this;
+        loadingDialog =  new MaterialDialog.Builder(this)
+                .progress(true,0)
+                .build();
+
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -82,6 +92,13 @@ public class MainActivity extends AppCompatActivity
 
          navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        final TextView userNameTv  = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name);
+        final TextView userEmailTv  = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email);
+
+        final ImageView userImageView  = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_image);
+
+
 
 
 
@@ -100,10 +117,28 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
                    // ApplicationClass.backupDbToFirebase();
                     //  attachView(user.getDisplayName());
+                    if(user.getDisplayName()!=null)
+                    userNameTv.setText(user.getDisplayName());
+
+                    if(user.getEmail()!=null)
+                    userEmailTv.setText(user.getEmail());
+
+                    if(user.getPhotoUrl()!=null){
+                        userImageView.setVisibility(View.VISIBLE);
+                        Config.loadImage(user.getPhotoUrl().toString(),userImageView);
+                    }
+
+
+
+
                      ApplicationClass.restoreBackupDb();
 
                 }else{
                     setAccountVisibility(false);
+                    userNameTv.setText("Guest User");
+                    userEmailTv.setText("");
+                    userImageView.setVisibility(View.INVISIBLE);
+
 
                     Log.e("TAG","user logged out ");
                     //user logged out
@@ -130,12 +165,24 @@ public class MainActivity extends AppCompatActivity
         }else{
             menuLogin.setVisible(true);
             menuLogout.setVisible(false);
-
-
         }
-
     }
 
+
+    public static  void showProgressLoading(String body,String header){
+    if(loadingDialog!=null){
+        loadingDialog.setTitle(header);
+        loadingDialog.setContent(body);
+        loadingDialog.show();
+    }
+    }
+
+    public static void hideProgressLoading(){
+        if(loadingDialog!=null)
+        if(loadingDialog.isShowing()){
+            loadingDialog.dismiss();
+        }
+    }
 
 
 
@@ -263,6 +310,31 @@ public class MainActivity extends AppCompatActivity
             Intent set = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(set);
             return true;
+        }else if(id == R.id.action_backup_db) {
+            if (new ApplicationClass().isUserLoggedin()) {
+                showProgressLoading("Please wait..", "Backing Up !");
+                new ApplicationClass().setBackupDbListener(new DbBackupCallback() {
+                    @Override
+                    public void DbBackupDone() {
+                        Log.e("TAG", "callback backup done option");
+                        Toast.makeText(c, "Backup completed", Toast.LENGTH_LONG).show();
+
+                        hideProgressLoading();
+                    }
+
+                    @Override
+                    public void DbBackupFailed() {
+                        Log.e("TAG", "callback backup failed option");
+                        Toast.makeText(c, "Failed to backup", Toast.LENGTH_LONG).show();
+                        hideProgressLoading();
+                    }
+                });
+                ApplicationClass.backupDbToFirebase();
+
+
+            }else{
+                openauthenticationView();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -296,4 +368,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
 }
+

@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.Cache;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
@@ -39,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mnf.android.wearnote.Adapters.RecycleViewAdapter;
 import mnf.android.wearnote.Model.Note;
+import mnf.android.wearnote.callbacks.AdapterItemUpdate;
 import mnf.android.wearnote.tools.DividerItemDecoration;
 import mnf.android.wearnote.tools.RecyclerTouchListener;
 import mnf.android.wearnote.tools.SimpleDividerItemDecoration;
@@ -69,7 +71,7 @@ public class ListNote extends Fragment {
     RecyclerView recyclerView;
     private static RecycleViewAdapter adapter;
     static TextView emptyPlaceholder;
-
+    RecyclerView.OnItemTouchListener listener;
     Context c;
     public ListNote() {
         // Required empty public constructor
@@ -186,12 +188,57 @@ public class ListNote extends Fragment {
         recyclerView.setAdapter(adapter);
         setUpItemTouchHelper();
         setUpAnimationDecoratorHelper();
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(c, recyclerView, new RecyclerTouchListener.ClickListener() {
+        new ApplicationClass().setAdapterItemListener(new AdapterItemUpdate() {
+            @Override
+            public void itemUpdated() {
+                Cache.clear();
+                final List<Note> items = Config.getNoteList();
+                Log.e("ListNote","item Updated  list size =  "+items.size());
+
+                if(items.size()>0){
+                    emptyPlaceholder.setVisibility(View.INVISIBLE);
+                }else{
+                    emptyPlaceholder.setVisibility(View.VISIBLE);
+                }
+
+                adapter.addItems(items);
+              //  addRecycleTouchListener(items,recyclerView);
+                if(listener!=null){
+                    recyclerView.removeOnItemTouchListener(listener);
+                }
+                recyclerView.addOnItemTouchListener(new RecyclerTouchListener(c, recyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        // Movie movie = movieList.get(position);
+                        // Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
+                        Log.e("ListNote"," new lister position = "+position+" list size =  "+items.size());
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(items.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
+            }
+        });
+
+        addRecycleTouchListener(list,recyclerView);
+
+        return v;
+    }
+
+    public void addRecycleTouchListener(  final List<Note> items, RecyclerView recyclerView){
+        Log.e("ListNote","items size = "+items.size());
+         listener = new RecyclerTouchListener(c, recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-               // Movie movie = movieList.get(position);
-                Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+                // Movie movie = movieList.get(position);
+                // Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
+                Log.e("ListNote","position = "+position+" list size =  "+items.size());
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(items.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
 
             }
 
@@ -199,20 +246,15 @@ public class ListNote extends Fragment {
             public void onLongClick(View view, int position) {
 
             }
-        }));
-        return v;
-    }
+        });
 
-    public static void addAdapterItems(){
-        List<Note> items = Config.getNoteList();
-        if(items.size()>0){
-            emptyPlaceholder.setVisibility(View.INVISIBLE);
-        }else{
-            emptyPlaceholder.setVisibility(View.VISIBLE);
-        }
-        adapter.addItems(Config.getNoteList());
+        recyclerView.addOnItemTouchListener(listener);
+
 
     }
+
+
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
