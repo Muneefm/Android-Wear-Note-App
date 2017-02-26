@@ -97,6 +97,7 @@ public class ListFragment extends Fragment {
         //mRecyclerView.setCircularScrollingGestureEnabled(true);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mRecyclerView.setBezelWidth(0.5f);
+        mRecyclerView.setBezelWidth(0.5f);
         //mRecyclerView.setScrollDegreesPerScreen(90);
          noteData = Config.getDBItems();
         mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteData));
@@ -142,6 +143,12 @@ public class ListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new AppController().sendMessage("/update","update_data");
     }
 
     /**

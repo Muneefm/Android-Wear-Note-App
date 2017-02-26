@@ -118,6 +118,8 @@ public class ListNote extends Fragment {
                 Log.e("TAG","deleting record with id  ="+note.getIdn());
             }
         }
+
+
     }
 
     @Override
