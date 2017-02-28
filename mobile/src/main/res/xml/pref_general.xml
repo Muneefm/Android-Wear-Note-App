@@ -1,5 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    >
     <PreferenceCategory android:title="Android Wear settings">
 
     <SwitchPreference
@@ -52,4 +54,6 @@
         android:positiveButtonText="@null"
         android:title="Select Font Style" />
     </PreferenceCategory>
+
+
 </PreferenceScreen>

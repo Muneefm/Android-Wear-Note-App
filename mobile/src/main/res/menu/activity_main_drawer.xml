@@ -29,11 +29,11 @@
         <menu>
             <item
                 android:id="@+id/nav_login"
-                android:icon="@drawable/ic_nav_settings"
+                android:icon="@drawable/ic_login"
                 android:title="Login" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_nav_settings"
+                android:icon="@drawable/ic_logout"
                 android:title="Logout" />
         </menu>
     </item>

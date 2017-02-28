@@ -87,7 +87,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 .setCacheSize(CACHE_SIZE)
                 .init();*/
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        MobileAds.initialize(getApplicationContext(), getInstance().getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-7269223551241818~3236512681");
 
 
 

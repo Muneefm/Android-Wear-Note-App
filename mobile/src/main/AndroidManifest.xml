@@ -41,7 +41,12 @@
             android:name=".Activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity"
-            />
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mnf.android.wearnote.MainActivity" />
+
+        </activity>
         <activity android:name=".Activity.PreferanceActivityNew"></activity>
         <receiver android:name=".tools.Reciever">
 

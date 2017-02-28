@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
 
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -21,7 +22,15 @@
         android:scrollbars="vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:scrollHorizontally="false" />
-
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_note_detail">
+    </com.google.android.gms.ads.AdView>
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -59,4 +68,5 @@
             fab:fab_colorPressed="@color/pink_pressed"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 </RelativeLayout>

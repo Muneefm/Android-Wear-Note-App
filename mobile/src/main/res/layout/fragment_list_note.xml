@@ -10,10 +10,10 @@
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_main"
-        android:paddingTop="10dp"
+        android:paddingTop="0dp"
         android:layout_width="match_parent"
         android:scrollbars="vertical"
-
+        android:paddingBottom="32dp"
         android:layout_height="match_parent">
 
 
@@ -47,6 +47,6 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
+        ads:adUnitId="@string/banner_note_list">
     </com.google.android.gms.ads.AdView>
 </RelativeLayout>

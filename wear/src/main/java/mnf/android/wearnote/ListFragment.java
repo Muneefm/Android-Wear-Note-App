@@ -55,6 +55,7 @@ public class ListFragment extends Fragment {
     RecyclerTouchListener recyclerTouchListener;
 
     private OnFragmentInteractionListener mListener;
+    Context c;
 
     public ListFragment() {
         // Required empty public constructor
@@ -93,6 +94,7 @@ public class ListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         pref = new WearPreferenceHandler(getActivity());
+        c = getActivity();
         mRecyclerView = (WearableRecyclerView) v.findViewById(R.id.notes_recycler_view);
       //  mRecyclerView.setCenterEdgeItems(true);
         headerLayout = (RelativeLayout) v.findViewById(R.id.rel_head);
@@ -139,6 +141,7 @@ public class ListFragment extends Fragment {
                 Cache.clear();
                final List<Note> noteDataNew = Config.getDBItems();
                 if(mRecyclerView!=null) {
+                    if(getActivity()!=null)
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

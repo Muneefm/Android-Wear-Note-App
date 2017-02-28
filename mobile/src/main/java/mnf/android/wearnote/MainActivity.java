@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 1;
     NavigationView navigationView;
     static MaterialDialog loadingDialog;
+    TextView tag;
 
 
     @Override
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
 
         toggle.syncState();
-
+        tag = (TextView) findViewById(R.id.tag);
          navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -113,8 +114,11 @@ public class MainActivity extends AppCompatActivity
                 if(user != null){
                     //user logged in
                     setAccountVisibility(true);
+                    if(tag!=null)
+                    tag.setVisibility(View.INVISIBLE);
+
                     Log.e("TAG","user logged in ");
-                    Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
                    // ApplicationClass.backupDbToFirebase();
                     //  attachView(user.getDisplayName());
                     if(user.getDisplayName()!=null)
@@ -138,7 +142,8 @@ public class MainActivity extends AppCompatActivity
                     userNameTv.setText("Guest User");
                     userEmailTv.setText("");
                     userImageView.setVisibility(View.INVISIBLE);
-
+                    if(tag!=null)
+                        tag.setVisibility(View.VISIBLE);
 
                     Log.e("TAG","user logged out ");
                     //user logged out

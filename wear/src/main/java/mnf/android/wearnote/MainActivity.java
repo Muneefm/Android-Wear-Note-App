@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.support.wearable.view.DefaultOffsettingHelper;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableRecyclerView;
@@ -25,7 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
+import mnf.android.wearnote.Fragment.FragmentNote;
+import mnf.android.wearnote.Fragment.NewNoteFragment;
 import mnf.android.wearnote.Model.MenuModel;
+import mnf.android.wearnote.Model.Note;
+import mnf.android.wearnote.Tools.RecyclerTouchListener;
 
 public class MainActivity extends Activity implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -68,12 +73,42 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         mRecyclerView.setScrollDegreesPerScreen(90);
 
 
-        List<MenuModel> listItem = new ArrayList<>();
-        listItem.add(new MenuModel("1","Notes"));
-        listItem.add(new MenuModel("2","Settings"));
+        final List<MenuModel> listItem = new ArrayList<>();
+        listItem.add(new MenuModel("1","New Note"));
+        listItem.add(new MenuModel("2","Notes"));
 
         mRecyclerView.setAdapter(new RecycleAdapterMenu(this,listItem));
-        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position,RecyclerView rv) {
+                // Movie movie = movieList.get(position);
+                //  Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
+                Log.e("TAG", " addOnItemTouchListener position = " + position);
+                if(listItem!=null) {
+                    MenuModel menuItem = listItem.get(position);
+                    switch (menuItem.getId()){
+                        case "1":
+                            getFragmentManager().beginTransaction().replace(R.id.containerView,new NewNoteFragment().newInstance("","")).addToBackStack("new_note").commit();
+                            break;
+                        case "2":
+                            getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+                            break;
+
+                    }
+                   //getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
+                }
+                //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+
 
 
     }

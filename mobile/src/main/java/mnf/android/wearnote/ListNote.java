@@ -132,6 +132,8 @@ public class ListNote extends Fragment {
        // rcMain = (RecyclerView) v.findViewById(R.id.rc_main);
 
         c = getActivity();
+        getActivity().setTitle("Notes");
+
         ButterKnife.bind(getActivity());
         recyclerView = (RecyclerView) v.findViewById(R.id.rc_main);
         emptyPlaceholder = (TextView) v.findViewById(R.id.empty_placeholder);

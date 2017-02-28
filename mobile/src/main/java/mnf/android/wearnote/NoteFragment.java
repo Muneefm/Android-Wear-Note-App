@@ -29,6 +29,8 @@ import com.activeandroid.query.Update;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -110,6 +112,10 @@ public class NoteFragment extends Fragment {
         pref = new MobilePreferenceHandler(getActivity());
         context = getActivity();
 
+        AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         Log.e("TAG","id recieved is "+mParam1);
 
       //  Typeface face=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Cabin-Regular.ttf");
@@ -167,7 +173,8 @@ public class NoteFragment extends Fragment {
                 .where("idn = ?", mParam1)
                 .executeSingle();
 
-
+        if(note.getTitle()!=null)
+            getActivity().setTitle(note.getTitle());
 
         edtNote.setText(note.getBody());
     }
