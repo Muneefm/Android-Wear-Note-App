@@ -129,7 +129,9 @@ public class Config {
 
 
     public static void setReminder(Date date, Context context,String noteid){
-        Log.e("Config","note id = "+noteid);
+        date.setSeconds(0);
+
+        Log.e("Config","Config.setReminder note id = "+noteid+" date = "+date);
         String idReminder = generateRandomNumberReminder();
         Intent intent = new Intent(context, Reciever.class);
         intent.putExtra("noteid",noteid);

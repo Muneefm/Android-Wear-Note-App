@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Cache;
 import com.activeandroid.query.Select;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +25,7 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FileDownloadTask;
@@ -70,6 +72,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     static int ii;
     static DbBackupCallback mListenerDb;
     static AdapterItemUpdate mListenerAdapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -83,6 +86,10 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 .setLogLevel(Ollie.LogLevel.FULL)
                 .setCacheSize(CACHE_SIZE)
                 .init();*/
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        MobileAds.initialize(getApplicationContext(), getInstance().getResources().getString(R.string.banner_ad_unit_id));
+
+
 
         ActiveAndroid.initialize(this);
         pref = new MobilePreferenceHandler(this);

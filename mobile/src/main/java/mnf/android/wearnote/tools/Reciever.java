@@ -19,8 +19,8 @@ public class Reciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("TAG","Reciever onReceive");
-        if((intent.getExtras().getInt("reminderid")!=0)&&(intent.getExtras().getInt("noteid") != 0)) {
-            Integer idReminder = intent.getExtras().getInt("reminderid");
+        if((!intent.getExtras().getString("reminderid").equals(""))&&(!intent.getExtras().getString("noteid").equals(""))) {
+            String idReminder = intent.getExtras().getString("reminderid");
 
             ReminderModel reminderModel = new Select()
                     .from(ReminderModel.class)
@@ -29,7 +29,7 @@ public class Reciever extends BroadcastReceiver {
             Log.e("TAG","Reciever status = "+reminderModel.getStatus());
 
             if (reminderModel.getStatus() == 1) {
-                Integer id = intent.getExtras().getInt("noteid");
+                String id = intent.getExtras().getString("noteid");
                 Log.e("TAG", "Reciever Extras id = " + id);
 
                 Note note = new Select()

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.support.wearable.view.WearableRecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,13 +13,17 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.activeandroid.Cache;
+
 import java.util.List;
 
 import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
 import mnf.android.wearnote.Adapter.RecycleAdapterNotes;
 import mnf.android.wearnote.Fragment.FragmentNote;
+import mnf.android.wearnote.Interfaces.DataUpdateCallback;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.Config;
+import mnf.android.wearnote.Tools.DataLayerListenerService;
 import mnf.android.wearnote.Tools.RecyclerTouchListener;
 import mnf.android.wearnote.Tools.SimpleDividerItemDecoration;
 import mnf.android.wearnote.Tools.WearPreferenceHandler;
@@ -46,6 +51,8 @@ public class ListFragment extends Fragment {
     List<Note> noteData;
     RelativeLayout headerLayout;
     WearPreferenceHandler pref;
+    final static String TAG = "ListFragment";
+    RecyclerTouchListener recyclerTouchListener;
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,9 +109,9 @@ public class ListFragment extends Fragment {
          noteData = Config.getDBItems();
         mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteData));
 
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+        recyclerTouchListener = new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
-            public void onClick(View view, int position) {
+            public void onClick(View view, int position,RecyclerView rv) {
                 // Movie movie = movieList.get(position);
                 //  Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
                 Log.e("TAG", " addOnItemTouchListener position = " + position);
@@ -120,7 +127,55 @@ public class ListFragment extends Fragment {
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        });
+
+        mRecyclerView.addOnItemTouchListener(recyclerTouchListener);
+
+
+        new DataLayerListenerService().setDataUpdateCallback(new DataUpdateCallback() {
+            @Override
+            public void dataUpdated() {
+                Log.e(TAG,"dataUpdated callback");
+                Cache.clear();
+               final List<Note> noteDataNew = Config.getDBItems();
+                if(mRecyclerView!=null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e(TAG,"running on ui thread");
+                            mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteDataNew));
+
+                            if(recyclerTouchListener!=null)
+                                mRecyclerView.removeOnItemTouchListener(recyclerTouchListener);
+
+
+                            mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+                                @Override
+                                public void onClick(View view, int position, RecyclerView rv) {
+                                    // Movie movie = movieList.get(position);
+                                    //  Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
+                                    Log.e("TAG", " addOnItemTouchListener position = " + position);
+
+                                    if(noteDataNew!=null) {
+                                        Note noteItem = noteDataNew.get(position);
+                                        getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
+                                    }
+                                    //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+
+                                }
+                            }));
+                        }
+                    });
+
+
+                }
+                }
+        });
 
 
             return  v;
@@ -148,7 +203,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new AppController().sendMessage("/update","update_data");
+        AppController.sendMessage();
     }
 
     /**

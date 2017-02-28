@@ -13,7 +13,7 @@ import android.view.View;
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
     public interface ClickListener {
-        void onClick(View view, int position);
+        void onClick(View view, int position,RecyclerView rv);
 
         void onLongClick(View view, int position);
     }
@@ -44,7 +44,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         View child = rv.findChildViewUnder(e.getX(), e.getY());
         if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-            clickListener.onClick(child, rv.getChildPosition(child));
+            clickListener.onClick(child, rv.getChildPosition(child),rv);
         }
         return false;
     }

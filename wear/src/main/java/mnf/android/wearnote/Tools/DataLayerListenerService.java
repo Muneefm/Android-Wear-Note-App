@@ -17,6 +17,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import mnf.android.wearnote.AppController;
+import mnf.android.wearnote.Interfaces.DataUpdateCallback;
 import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 
@@ -26,6 +27,8 @@ import mnf.android.wearnote.Model.Note;
 
 public class DataLayerListenerService extends WearableListenerService {
 
+    static DataUpdateCallback mCallback;
+    final static String TAG = "DataLayerListenerServic";
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
         Log.e("TAG", "onDataChanged ");
@@ -60,7 +63,14 @@ public class DataLayerListenerService extends WearableListenerService {
         }
     }
 
-    public void saveDataToDB(BaseModel model){
+    public void setDataUpdateCallback(DataUpdateCallback callback){
+        Log.e(TAG,"setDataUpdateCallback called");
+        this.mCallback = callback;
+    }
+
+
+
+    public static void saveDataToDB(BaseModel model){
 
         Note.truncate(Note.class);
 
@@ -79,7 +89,17 @@ public class DataLayerListenerService extends WearableListenerService {
         finally {
             ActiveAndroid.endTransaction();
             Log.e("TAG","Active Android end transation");
+            if(mCallback!=null) {
+                Log.e(TAG,"mCallback dataupdate ");
+                mCallback.dataUpdated();
+            }else{
+                Log.e(TAG,"mCallback null");
+            }
         }
+
+
+
+
     }
 }
 

@@ -82,6 +82,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
+        new AppController().sendMessage();
 
     }
 

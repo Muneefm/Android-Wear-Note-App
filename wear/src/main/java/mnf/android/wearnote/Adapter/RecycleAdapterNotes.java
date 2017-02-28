@@ -52,6 +52,10 @@ public class RecycleAdapterNotes  extends WearableRecyclerView.Adapter<RecycleAd
     }
 */
 
+    public List<Note> getmDataset() {
+        return mDataset;
+    }
+
     @Override
     public RecycleAdapterNotes.ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecycleAdapterNotes.ItemViewHolder(mInflater.inflate(R.layout.note_list_item, null));

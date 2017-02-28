@@ -29,8 +29,12 @@ dependencies {
     wearApp project(':wear')
     compile files('libs/gson-2.8.0 .jar')
 
+    compile 'com.google.firebase:firebase-core:10.0.1'
+
     compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.firebaseui:firebase-ui-auth:1.0.1'
+    compile 'com.google.firebase:firebase-ads:10.0.1'
+
 
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.android.support:appcompat-v7:25.1.0'

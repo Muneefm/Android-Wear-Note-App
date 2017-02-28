@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.activeandroid.Cache;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -133,6 +135,11 @@ public class ListNote extends Fragment {
         ButterKnife.bind(getActivity());
         recyclerView = (RecyclerView) v.findViewById(R.id.rc_main);
         emptyPlaceholder = (TextView) v.findViewById(R.id.empty_placeholder);
+
+        AdView mAdView = (AdView) v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         Typeface face=Typeface.createFromAsset(c.getAssets(), "fonts/Cabin-Regular.ttf");
         emptyPlaceholder.setTypeface(face);
 
@@ -178,6 +185,7 @@ public class ListNote extends Fragment {
             emptyPlaceholder.setVisibility(View.VISIBLE);
         }
         adapter = new RecycleViewAdapter(c,list);
+
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
