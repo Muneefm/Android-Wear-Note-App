@@ -57,6 +57,7 @@ public class DataLayerListenerService extends WearableListenerService {
                 pref.setFontSize(map.getString("font_size"));
                 pref.setTheme(map.getBoolean("theme"));
                 pref.setFontColor(map.getInt("font_color"));
+                Log.e(TAG,"font color recieved = "+map.getInt("font_color"));
                 pref.setFontStyle(map.getString("font_style"));
 
             }

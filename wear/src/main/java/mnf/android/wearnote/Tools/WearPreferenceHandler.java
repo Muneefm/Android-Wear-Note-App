@@ -58,7 +58,7 @@ public class WearPreferenceHandler {
         editor.commit();
     }
     public int getFontColor(){
-        return pref.getInt(fontColor, R.color.grey800);
+        return pref.getInt(fontColor, c.getColor(R.color.grey800));
     }
 
 

@@ -72,6 +72,8 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         mRecyclerView.setBezelWidth(0.5f);
         mRecyclerView.setScrollDegreesPerScreen(90);
 
+        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+
 
         final List<MenuModel> listItem = new ArrayList<>();
         listItem.add(new MenuModel("1","New Note"));
@@ -89,10 +91,10 @@ public class MainActivity extends Activity implements DataApi.DataListener,
                     MenuModel menuItem = listItem.get(position);
                     switch (menuItem.getId()){
                         case "1":
-                            getFragmentManager().beginTransaction().replace(R.id.containerView,new NewNoteFragment().newInstance("","")).addToBackStack("new_note").commit();
+                          //  getFragmentManager().beginTransaction().replace(R.id.containerView,new NewNoteFragment().newInstance("","")).addToBackStack("new_note").commit();
                             break;
                         case "2":
-                            getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+                         //   getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
                             break;
 
                     }

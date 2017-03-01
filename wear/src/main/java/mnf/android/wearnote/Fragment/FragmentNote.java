@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,6 +126,7 @@ public class FragmentNote extends Fragment {
         if(!mParam2.equals("")&&mParam2!=null) {
             tvNote.setText(mParam2);
             tvNote.setTextColor(pref.getFontColor());
+            Log.e("NoteFragment","pref int = "+pref.getFontColor()+" grey int = "+getResources().getColor(R.color.grey800));
             tvNote.setVisibility(View.VISIBLE);
         }
 

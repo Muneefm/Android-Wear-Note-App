@@ -3,7 +3,7 @@
 
     <item android:drawable="@color/red"/>
 
-    <item android:top="120dp">
+    <item android:top="20dp">
         <bitmap
             android:src="@drawable/ic_watch_white"
             android:gravity="top|center_horizontal" />
