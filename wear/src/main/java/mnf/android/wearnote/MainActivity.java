@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         mRecyclerView.setBezelWidth(0.5f);
         mRecyclerView.setScrollDegreesPerScreen(90);
 
-        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note").commit();
 
 
         final List<MenuModel> listItem = new ArrayList<>();

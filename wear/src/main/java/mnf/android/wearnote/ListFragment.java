@@ -119,7 +119,7 @@ public class ListFragment extends Fragment {
                 Log.e("TAG", " addOnItemTouchListener position = " + position);
                 if(noteData!=null) {
                     Note noteItem = noteData.get(position);
-                    getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
+                    getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note").commit();
                 }
                 //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
 
