@@ -29,6 +29,7 @@
             android:name="AA_DB_VERSION"
             android:value="2" />
 
+
         <service android:name=".MainActivity" />
         <service
             android:name=".tools.WearListenerService" >

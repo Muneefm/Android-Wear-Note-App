@@ -274,7 +274,7 @@ public class NoteFragment extends Fragment {
                 .from(Note.class)
                 .where("idn = ?", mParam1)
                 .executeSingle();
-        new SendNotification(context,noteGet.body,noteGet.getTitle()).sendNotificationWear();
+        new SendNotification(context,noteGet.body,noteGet.getTitle(),mParam1).sendNotificationWear();
     }
 
 
@@ -323,7 +323,7 @@ public class NoteFragment extends Fragment {
                     .from(Note.class)
                     .where("idn = ?", mParam1)
                     .executeSingle();
-             new SendNotification(context,noteGet.body,noteGet.getTitle()).sendNotificationWear();
+             new SendNotification(context,noteGet.body,noteGet.getTitle(),mParam1).sendNotificationWear();
 
 
             return true;

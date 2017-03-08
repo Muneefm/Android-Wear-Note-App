@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAuth = FirebaseAuth.getInstance();
 
 
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -101,11 +103,36 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Log.e("TAG","bundle not null");
+
+            if(bundle.containsKey("uid")) {
+                Log.e("TAG","bundle has key uid");
+
+                if (bundle.getString("uid") != null) {
+                    String uid = bundle.getString("uid");
+                    Log.e("TAG","bundle uid =  "+uid);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new NoteFragment().newInstance(uid+"", "")).commit();
+                }else{
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
+                }
+            }else{
+                Log.e("TAG","bundle has  no key ");
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
+
+            }
+        }else{
+            Log.e("TAG","bundle null");
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
+
+        }
 
 
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
+
         mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

@@ -36,7 +36,7 @@ public class Reciever extends BroadcastReceiver {
                         .from(Note.class)
                         .where("idn = ?", id)
                         .executeSingle();
-                new SendNotification(context, note.getTitle(), note.getBody()).sendNotificationWear();
+                new SendNotification(context, note.getTitle(), note.getBody(),id).sendNotificationWear();
                 new Delete().from(ReminderModel.class).where("idn = ?",idReminder).execute();
                 Log.e("TAG", "Reciever delete id = " + idReminder);
 

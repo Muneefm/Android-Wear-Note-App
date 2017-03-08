@@ -10,7 +10,7 @@
     <item
         android:id="@+id/send_ontime"
         android:orderInCategory="100"
-        android:title="send Later"
+        android:title="Send Later"
         app:showAsAction="never" />
 </menu>
 

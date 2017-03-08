@@ -86,12 +86,13 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
                 .setLogLevel(Ollie.LogLevel.FULL)
                 .setCacheSize(CACHE_SIZE)
                 .init();*/
+        ActiveAndroid.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-7269223551241818~3236512681");
 
 
 
-        ActiveAndroid.initialize(this);
+
         pref = new MobilePreferenceHandler(this);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
