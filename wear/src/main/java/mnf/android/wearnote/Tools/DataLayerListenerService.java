@@ -48,8 +48,10 @@ public class DataLayerListenerService extends WearableListenerService {
                 builder.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC);
                 Gson gson = builder.create();
                 BaseModel baseModel =  gson.fromJson(stringExample, BaseModel.class);
-                Log.e("TAG", "baseModel = " + baseModel.getNote().size());
-                saveDataToDB(baseModel);
+                if(baseModel!=null) {
+                    Log.e("TAG", "baseModel = " + baseModel.getNote().size());
+                    saveDataToDB(baseModel);
+                }
             }
             if("/pref".equals(path)){
                 Log.e("TAG","pref f_size = "+map.getString("font_size")+" theme "+map.getBoolean("theme")+" color = "+map.getInt("font_color")+" style = "+map.getString("font_style"));

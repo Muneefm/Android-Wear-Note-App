@@ -125,8 +125,18 @@ public class FragmentNote extends Fragment {
 
         if(!mParam2.equals("")&&mParam2!=null) {
             tvNote.setText(mParam2);
-            tvNote.setTextColor(pref.getFontColor());
-            Log.e("NoteFragment","pref int = "+pref.getFontColor()+" grey int = "+getResources().getColor(R.color.grey800));
+            if(pref.getFontColor() == 0){
+                Log.e("NoteFragment", "color pref value is zero ");
+
+                tvNote.setTextColor(getResources().getColor(R.color.grey800));
+
+            }else {
+                Log.e("NoteFragment", "color pref value is not zero ");
+                tvNote.setTextColor(pref.getFontColor());
+                Log.e("NoteFragment", "raw colot  int = " + R.color.grey800);
+
+                Log.e("NoteFragment", "pref int = " + pref.getFontColor() + " grey int = " + getResources().getColor(R.color.grey800));
+            }
             tvNote.setVisibility(View.VISIBLE);
         }
 
