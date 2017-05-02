@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,10 +36,12 @@ public class RecycleAdapterMenu extends WearableRecyclerView.Adapter<RecycleAdap
     // Provide a reference to the type of views you're using
     public static class ItemViewHolder extends WearableRecyclerView.ViewHolder {
         private TextView textView;
+        private ImageView iconIV;
         public ItemViewHolder(View itemView) {
             super(itemView);
             // find the text view within the custom item's layout
             textView = (TextView) itemView.findViewById(R.id.name);
+            iconIV = (ImageView) itemView.findViewById(R.id.circle);
         }
     }
 
@@ -62,6 +65,7 @@ public class RecycleAdapterMenu extends WearableRecyclerView.Adapter<RecycleAdap
         Log.e("TAG","onBindViewHolder position = "+position);
         MenuModel item = mDataset.get(position);
         holder.textView.setText(item.getTitle());
+        holder.iconIV.setImageDrawable(mContext.getResources().getDrawable(item.getIcon()));
 
     }
 

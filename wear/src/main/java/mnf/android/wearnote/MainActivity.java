@@ -1,6 +1,7 @@
 package mnf.android.wearnote;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,17 +68,18 @@ public class MainActivity extends Activity implements DataApi.DataListener,
 
         CircularOffsettingHelper circularHelper = new CircularOffsettingHelper();
         MyOffsettingHelper myOffsettingHelper = new MyOffsettingHelper();
-        mRecyclerView.setOffsettingHelper(myOffsettingHelper);
-        mRecyclerView.setCircularScrollingGestureEnabled(true);
-        mRecyclerView.setBezelWidth(0.5f);
-        mRecyclerView.setScrollDegreesPerScreen(90);
+       mRecyclerView.setOffsettingHelper(myOffsettingHelper);
+        mRecyclerView.setCircularScrollingGestureEnabled(false);
+        mRecyclerView.setBezelWidth(1f);
+        mRecyclerView.setScrollDegreesPerScreen(250);
 
-        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note").commit();
+      //  getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note").commit();
 
 
         final List<MenuModel> listItem = new ArrayList<>();
-        listItem.add(new MenuModel("1","New Note"));
-        listItem.add(new MenuModel("2","Notes"));
+        listItem.add(new MenuModel("1","New Note",R.mipmap.red_add));
+        listItem.add(new MenuModel("2","Notes",R.mipmap.red_note));
+        listItem.add(new MenuModel("3","Settings",R.mipmap.red_settr));
 
         mRecyclerView.setAdapter(new RecycleAdapterMenu(this,listItem));
 
@@ -91,11 +93,17 @@ public class MainActivity extends Activity implements DataApi.DataListener,
                     MenuModel menuItem = listItem.get(position);
                     switch (menuItem.getId()){
                         case "1":
-                          //  getFragmentManager().beginTransaction().replace(R.id.containerView,new NewNoteFragment().newInstance("","")).addToBackStack("new_note").commit();
+                            getFragmentManager().beginTransaction().replace(R.id.containerView,new NewNoteFragment().newInstance("","")).addToBackStack("new_note").commit();
                             break;
                         case "2":
-                         //   getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+                          FragmentTransaction transNotes = getFragmentManager().beginTransaction();
+                            transNotes.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                            transNotes.replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
                             break;
+                        case "3":
+                            getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note_list").commit();
+                            break;
+
 
                     }
                    //getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
@@ -179,7 +187,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
     public static  class MyOffsettingHelper extends DefaultOffsettingHelper {
 
         /** How much should we scale the icon at most. */
-        private static final float MAX_ICON_PROGRESS = 0.65f;
+        private static final float MAX_ICON_PROGRESS = 2f;
 
         private float mProgressToCenter;
 

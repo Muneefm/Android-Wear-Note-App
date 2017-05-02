@@ -8,9 +8,11 @@ public class MenuModel {
 
     private String title;
     private String id;
-    public MenuModel(String id,String title){
+    private int icon;
+    public MenuModel(String id,String title,int icon){
         this.title=title;
         this.id=id;
+        this.icon=icon;
     }
 
     public void setTitle(String title){
@@ -26,6 +28,15 @@ public class MenuModel {
 
     public String getId(){
         return id;
+    }
+
+
+    public void setIcon(int icon){
+        this.icon=icon;
+    }
+
+    public int getIcon(){
+        return icon;
     }
 
 }

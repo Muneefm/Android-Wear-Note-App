@@ -4,6 +4,7 @@
     android:id="@+id/note_frag_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_grey800"
     tools:context="mnf.android.wearnote.Fragment.FragmentNote">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,7 +27,7 @@
 
             <EditText
                 android:id="@+id/note"
-                android:textColor="@color/grey800"
+                android:textColor="@color/white"
                 app:layout_box="all"
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
