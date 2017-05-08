@@ -27,6 +27,8 @@ public class MobilePreferenceHandler {
     final String fabLearn="fab_learn";
     final String firstTimeOpen="first_time_open";
 
+    final String firstTimeSignInRestore="first_time_sign_restore";
+
 
 
 
@@ -73,6 +75,17 @@ public class MobilePreferenceHandler {
     }
     public boolean getFirstTimeOpen(){
         return pref.getBoolean(firstTimeOpen, true);
+    }
+
+
+
+    public void setFirstTimeSignInRestore(boolean var){
+        Log.e("TAG","setFirstTimeSignInRestore Set"+var );
+        editor.putBoolean(firstTimeSignInRestore, var);
+        editor.commit();
+    }
+    public boolean getFirstTimeSignInRestore(){
+        return pref.getBoolean(firstTimeSignInRestore, false);
     }
 
 

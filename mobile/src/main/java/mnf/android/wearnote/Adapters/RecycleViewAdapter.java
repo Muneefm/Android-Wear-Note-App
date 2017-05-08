@@ -175,6 +175,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
             notifyItemRemoved(position);
             ApplicationClass.syncDatatoWear();
+            ApplicationClass.backupDbToFirebase();
         }
     }
 

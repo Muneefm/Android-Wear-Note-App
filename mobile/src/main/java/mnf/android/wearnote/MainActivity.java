@@ -51,6 +51,7 @@ import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
 import mnf.android.wearnote.callbacks.DbBackupCallback;
+import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class MainActivity extends AppCompatActivity
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     static MaterialDialog loadingDialog;
     TextView tag;
-
+    MobilePreferenceHandler pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         c =this;
+        pref = new MobilePreferenceHandler(c);
         loadingDialog =  new MaterialDialog.Builder(this)
                 .progress(true,0)
                 .build();
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                     if(tag!=null)
                     tag.setVisibility(View.INVISIBLE);
 
-                    Log.e("TAG","user logged in ");
+                    Log.e("MainActivity","user logged in main listener ");
                     //Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
                    // ApplicationClass.backupDbToFirebase();
                     //  attachView(user.getDisplayName());
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
+                     pref.setFirstTimeSignInRestore(true);
                      ApplicationClass.restoreBackupDb();
 
                 }else{
