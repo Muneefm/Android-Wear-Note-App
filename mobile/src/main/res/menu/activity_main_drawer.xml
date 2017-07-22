@@ -36,6 +36,11 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"
                 android:title="Logout" />
+
+            <item
+                android:id="@+id/pro"
+                android:icon="@mipmap/medal"
+                android:title="Upgrade to PRO" />
         </menu>
     </item>
 

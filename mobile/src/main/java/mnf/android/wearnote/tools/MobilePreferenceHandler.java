@@ -28,7 +28,9 @@ public class MobilePreferenceHandler {
     final String firstTimeOpen="first_time_open";
 
     final String firstTimeSignInRestore="first_time_sign_restore";
-
+    final String userAdClickLeft="user_ad_click";
+    final String isPremiumUser="is_user_premium";
+    final String userNoteClicks="user_notes_click";
 
 
 
@@ -87,6 +89,42 @@ public class MobilePreferenceHandler {
     public boolean getFirstTimeSignInRestore(){
         return pref.getBoolean(firstTimeSignInRestore, false);
     }
+
+
+    public void setUserPaidOrNot(boolean var){
+        Log.e("TAG","setUserPaid Set"+var );
+        editor.putBoolean(isPremiumUser, var);
+        editor.commit();
+    }
+    public boolean getUserPaidOrNot(){
+        return pref.getBoolean(isPremiumUser, false);
+    }
+
+
+
+
+    public void setUserAdsClickLeft(int var){
+        Log.e("TAG","setUserPaid Set"+var );
+        editor.putInt(userAdClickLeft, var);
+        editor.commit();
+    }
+    public int getUserAdsClickLeft(){
+        return pref.getInt(userAdClickLeft, 0);
+    }
+
+
+
+    public void setUserNoteClicks(int var){
+        Log.e("TAG","setUserPaid Set"+var );
+        editor.putInt(userNoteClicks, var);
+        editor.commit();
+    }
+    public int getUserNoteClicks(){
+        return pref.getInt(userNoteClicks, 0);
+    }
+
+
+
 
 
  /*   public void setTheme(boolean var){

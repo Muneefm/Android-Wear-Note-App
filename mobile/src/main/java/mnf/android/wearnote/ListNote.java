@@ -1,6 +1,7 @@
 package mnf.android.wearnote;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Movie;
@@ -10,9 +11,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,8 +33,14 @@ import android.widget.Toast;
 import com.activeandroid.Cache;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -44,6 +53,7 @@ import mnf.android.wearnote.Adapters.RecycleViewAdapter;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.callbacks.AdapterItemUpdate;
 import mnf.android.wearnote.tools.DividerItemDecoration;
+import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.RecyclerTouchListener;
 import mnf.android.wearnote.tools.SimpleDividerItemDecoration;
 
@@ -56,7 +66,7 @@ import mnf.android.wearnote.tools.SimpleDividerItemDecoration;
  * Use the {@link ListNote#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListNote extends Fragment {
+public class ListNote extends Fragment implements BillingProcessor.IBillingHandler{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -75,6 +85,12 @@ public class ListNote extends Fragment {
     static TextView emptyPlaceholder;
     RecyclerView.OnItemTouchListener listener;
     Context c;
+    MobilePreferenceHandler pref;
+    boolean canGoForward = false;
+    private InterstitialAd mInterstitialAd;
+    public static String TAG  = "NoteList";
+    BillingProcessor bp;
+
     public ListNote() {
         // Required empty public constructor
     }
@@ -125,6 +141,20 @@ public class ListNote extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -133,14 +163,56 @@ public class ListNote extends Fragment {
 
         c = getActivity();
         getActivity().setTitle("Notes");
+        pref = new MobilePreferenceHandler(c);
+        bp = new BillingProcessor(c, Config.base64, this);
 
         ButterKnife.bind(getActivity());
         recyclerView = (RecyclerView) v.findViewById(R.id.rc_main);
         emptyPlaceholder = (TextView) v.findViewById(R.id.empty_placeholder);
 
-        AdView mAdView = (AdView) v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+        if(pref!=null){
+            Log.e(TAG,"user clicks = "+pref.getUserNoteClicks());
+            if(!pref.getUserPaidOrNot()) {
+                if (pref.getUserNoteClicks() >= Config.noteClickLimitToPremium) {
+                    Log.e(TAG, "inside user click");
+                    pref.setUserNoteClicks(0);
+                    showPremiumDialogue(getActivity());
+                }
+            }
+        }
+
+
+
+
+        if(!pref.getUserPaidOrNot()){
+            AdView mAdView = (AdView) v.findViewById(R.id.adView);
+            mAdView.setVisibility(View.VISIBLE);
+
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+            Log.v(TAG,"user not paid. initializing interstrial ads");
+            mInterstitialAd = new InterstitialAd(c);
+            mInterstitialAd.setAdUnitId(c.getResources().getString(R.string.interstitial_ad_id));
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                }
+            });
+
+        }else{
+            AdView mAdView = (AdView) v.findViewById(R.id.adView);
+            mAdView.setVisibility(View.GONE);
+        }
+
+
+
+
+
+
 
         Typeface face=Typeface.createFromAsset(c.getAssets(), "fonts/Cabin-Regular.ttf");
         emptyPlaceholder.setTypeface(face);
@@ -160,7 +232,9 @@ public class ListNote extends Fragment {
                 note.date=  DateFormat.getDateTimeInstance().format(new Date());
                 note.save();
                 Log.e("TAG","new record with id  = "+newIdn);
-
+                if(pref!=null) {
+                    pref.setUserAdsClickLeft(pref.getUserAdsClickLeft() + 1);
+                }
                 //  FragmentManager fragmentManager = getFragmentManager()
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(newIdn+"","")).addToBackStack("note").commit();
 
@@ -242,16 +316,57 @@ public class ListNote extends Fragment {
         return v;
     }
 
+    private void showPremiumDialogue(final FragmentActivity c) {
+
+        new MaterialDialog.Builder(c)
+                .title(R.string.upgrade_pro)
+                .content(R.string.upgrade_desc)
+                .positiveText(R.string.upgrade)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if(bp!=null){
+                            bp.purchase(c, Config.productIdAds);
+                        }
+                    }
+                })
+                .icon(c.getResources().getDrawable(R.mipmap.ic_launcher))
+                .show();
+
+
+    }
+
     public void addRecycleTouchListener(  final List<Note> items, RecyclerView recyclerView){
         Log.e("ListNote","items size = "+items.size());
          listener = new RecyclerTouchListener(c, recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
+                pref.setUserNoteClicks(pref.getUserNoteClicks()+1);
                 // Movie movie = movieList.get(position);
                 // Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
-                Log.e("ListNote","position = "+position+" list size =  "+items.size());
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(items.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
+                if(mInterstitialAd!=null) {
+                    if (mInterstitialAd.isLoaded() && (pref.getUserAdsClickLeft() >= Config.adclickLimit)) {
+                        Log.e(TAG, " Intertial ad is loading.  clicks - " + pref.getUserAdsClickLeft());
+                        mInterstitialAd.show();
+                        pref.setUserAdsClickLeft(0);
+                    } else {
+                        Log.e(TAG, " Intertial ad is not loading.  clicks - " + pref.getUserAdsClickLeft());
 
+                        pref.setUserAdsClickLeft(pref.getUserAdsClickLeft() + 1);
+
+                        Log.e("ListNote", "position = " + position + " list size =  " + items.size());
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new NoteFragment().newInstance(items.get(position).getIdn().toString(), "")).addToBackStack("note").commit();
+                    }
+                }else{
+                    Log.e(TAG, " Intertial ad is not loading.  clicks - " + pref.getUserAdsClickLeft());
+
+                    pref.setUserAdsClickLeft(pref.getUserAdsClickLeft() + 1);
+
+                    Log.e("ListNote", "position = " + position + " list size =  " + items.size());
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new NoteFragment().newInstance(items.get(position).getIdn().toString(), "")).addToBackStack("note").commit();
+                }
             }
 
             @Override
@@ -284,6 +399,35 @@ public class ListNote extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+
+
+
+
+    @Override
+    public void onProductPurchased(String productId, TransactionDetails details) {
+        Log.e(TAG,"onProductPurchased ");
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+        Log.e(TAG,"onPurchaseHistoryRestored ");
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, Throwable error) {
+        Log.e(TAG,"onBillingError ");
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+        Log.e(TAG,"onBillingInitialized ");
+
     }
 
     /**

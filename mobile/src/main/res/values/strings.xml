@@ -104,6 +104,11 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="banner_note_list">ca-app-pub-7269223551241818/6189979081</string>
     <string name="banner_note_detail">ca-app-pub-7269223551241818/1620178683</string>
+    <string name="interstitial_ad_id">ca-app-pub-7269223551241818/2406415921</string>
+    <string name="upgrade_pro">Upgrade to Wear Note PRO</string>
+    <string name="upgrade_desc">Upgrade to pro and Use the app seamlessly without the interference of any ads</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

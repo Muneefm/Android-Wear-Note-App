@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,7 +57,7 @@ import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,BillingProcessor.IBillingHandler {
     private static GoogleApiClient mGoogleApiClient;
     FragmentManager fManager;
     private static final String COUNT_KEY = "count";
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     static MaterialDialog loadingDialog;
     TextView tag;
-    MobilePreferenceHandler pref;
+    static MobilePreferenceHandler pref;
+    public static String TAG = "MainActivity";
+    BillingProcessor bp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAuth = FirebaseAuth.getInstance();
 
 
+        bp = new BillingProcessor(this, Config.base64, this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,6 +135,9 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new ListNote().newInstance("","")).commit();
 
         }
+
+
+
 
 
 
@@ -186,7 +194,30 @@ public class MainActivity extends AppCompatActivity
             }
         };
         mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
+
+
+        Log.e(TAG,"purchase call ");
+
+
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
+
+
 
 
     public void setAccountVisibility(boolean loggedIn){
@@ -233,10 +264,6 @@ public class MainActivity extends AppCompatActivity
 
                         .build(),
                 RC_SIGN_IN);
-
-
-
-
 
     }
 
@@ -364,9 +391,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
                 ApplicationClass.backupDbToFirebase();
-
-
             }else{
+
                 openauthenticationView();
             }
         }
@@ -396,6 +422,9 @@ public class MainActivity extends AppCompatActivity
         }else if(id == R.id.nav_logout){
             logoutUser();
         }
+        else if(id == R.id.pro){
+            bp.purchase(this, Config.productIdAds);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -404,5 +433,32 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    @Override
+    public void onProductPurchased(String productId, TransactionDetails details) {
+        Log.e(TAG,"onProductPurchased product id= "+productId);
+        Log.e(TAG,"onProductPurchased transation details = "+details.purchaseToken);
+        if(pref!=null){
+            pref.setUserPaidOrNot(true);
+        }
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+        Log.e(TAG,"onPurchaseHistoryRestored "+bp.getPurchaseListingDetails(Config.productIdAds));
+    }
+
+    @Override
+    public void onBillingError(int errorCode, Throwable error) {
+        Log.e(TAG,"onBillingError errorCode = "+errorCode+"  ");
+    }
+
+    @Override
+    public void onBillingInitialized() {
+        Log.e(TAG,"onBillingInitialized ");
+        //bp.purchase(this, Config.productIdAds);
+       // Log.e(TAG,"onPurchaseHistoryRestored "+bp.getPurchaseTransactionDetails(Config.productIdAds));
+
+    }
 }
 

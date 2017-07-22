@@ -90,6 +90,7 @@ public class NoteFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @BindView(R.id.edt_note)
     EditText edtNote;
     @Override
@@ -112,9 +113,17 @@ public class NoteFragment extends Fragment {
         pref = new MobilePreferenceHandler(getActivity());
         context = getActivity();
 
-        AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if(!pref.getUserPaidOrNot()) {
+            AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
+            mAdView.setVisibility(View.VISIBLE);
+
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
+            mAdView.setVisibility(View.GONE);
+
+        }
 
         Log.e("TAG","id recieved is "+mParam1);
 
@@ -294,6 +303,15 @@ public class NoteFragment extends Fragment {
 
 
     }
+
+
+
+
+
+
+
+
+
 
     @Override
     public void onDetach() {

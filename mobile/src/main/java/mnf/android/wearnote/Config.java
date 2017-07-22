@@ -29,7 +29,14 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class Config {
-   static int min = 1000;
+
+    public static String base64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoKWzEUVcKfYhX3wwDzR17+CRLwCy8Dpwxnjezr3OQEZmscrp5K3w5WC5KiqpROqrQxbTe1ON7TZij6guJogws5KRAOOxVa6sPKalTEs0zy4tnU9UDjAAFxCRSqH9X23D0Vb/Iu01Rc4tpEibOVsAYDJzIf/1yCx+Tx85lhVqbMVc7et9HBmtR8VyUt8bBtZp5Z5mvvBSbQnMifMbxtNYqnTDGJgZJWOfs4yIS9oa6XZhnNyO+AvO7Frh0zXlc8AVu3vEOlazdqFgv9Wa/paguHs24pZyM8CmXJGNpQ7TRp4LgPBTxS/BAde1j2vTQz/NBI27qCkuM1AwHqxdKwKp6wIDAQAB";
+    public static String productIdAds ="removeads";
+    public static int adclickLimit =1;
+    public static int noteClickLimitToPremium =3;
+
+
+    static int min = 1000;
     static int max = 999999999;
     static int i =0;
     public static String generateRandomNumberGenerate(){

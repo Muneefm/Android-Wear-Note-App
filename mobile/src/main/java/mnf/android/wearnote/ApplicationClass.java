@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import android.view.MenuItem;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Cache;
 import com.activeandroid.query.Select;
-import com.android.vending.billing.IInAppBillingService;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,7 +60,7 @@ import mnf.android.wearnote.tools.WearPreferenceHandler;
 
 public class ApplicationClass extends MultiDexApplication implements NavigationView.OnNavigationItemSelectedListener,DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final int CACHE_SIZE = 1;
     private static final String DB_NAME = "note";
@@ -77,7 +78,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     static DbBackupCallback mListenerDb;
     static AdapterItemUpdate mListenerAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
-    IInAppBillingService mService = null;
+    public static String TAG = "ApplicationClass";
 
 
     @Override
@@ -124,13 +125,6 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
 
 
     }
-
-
-
-
-
-
-
 
 
 
@@ -433,5 +427,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     public static void syncDbFromFirebase(){
 
     }
+
+
 
 }
