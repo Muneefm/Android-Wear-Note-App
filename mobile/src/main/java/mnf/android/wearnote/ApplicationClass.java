@@ -2,9 +2,12 @@ package mnf.android.wearnote;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Cache;
 import com.activeandroid.query.Select;
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,6 +77,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     static DbBackupCallback mListenerDb;
     static AdapterItemUpdate mListenerAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
+    IInAppBillingService mService = null;
 
 
     @Override
@@ -115,7 +120,28 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
         }
         syncDatatoWear();
         syncPrefToWear(new WearPreferenceHandler(getInstance()));
+
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public Context getInstance(){
