@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mnf.android.wearnote.Activity.SettingsActivity;
 import mnf.android.wearnote.Model.Note;
+import mnf.android.wearnote.callbacks.PurchaseCallback;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.Reciever;
 import mnf.android.wearnote.tools.SendNotification;
@@ -59,6 +60,7 @@ public class NoteFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final  String TAG = "NoteFragment";
     Note note;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,7 +70,7 @@ public class NoteFragment extends Fragment {
     MobilePreferenceHandler pref;
     FloatingActionsMenu fabMenu;
     FloatingActionButton fabSendWear,fabReminder;
-
+    AdView mAdView;
     public NoteFragment() {
         // Required empty public constructor
     }
@@ -114,16 +116,30 @@ public class NoteFragment extends Fragment {
         context = getActivity();
 
         if(!pref.getUserPaidOrNot()) {
-            AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
+             mAdView = (AdView) v.findViewById(R.id.adViewNote);
             mAdView.setVisibility(View.VISIBLE);
 
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
         }else{
-            AdView mAdView = (AdView) v.findViewById(R.id.adViewNote);
+             mAdView = (AdView) v.findViewById(R.id.adViewNote);
             mAdView.setVisibility(View.GONE);
 
         }
+
+
+
+        new MainActivity().setPurchaseCallback(new PurchaseCallback() {
+            @Override
+            public void onPurchaseMade(String productId) {
+                Log.e(TAG,"onPurchase callback product id = "+productId );
+                if(mAdView!=null){
+                    Log.e(TAG,"onPurchase callback adView is not null "+productId );
+                    mAdView.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         Log.e("TAG","id recieved is "+mParam1);
 

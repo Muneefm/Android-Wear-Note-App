@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
@@ -53,6 +54,7 @@ import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
 import mnf.android.wearnote.callbacks.DbBackupCallback;
+import mnf.android.wearnote.callbacks.PurchaseCallback;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     static MobilePreferenceHandler pref;
     public static String TAG = "MainActivity";
     BillingProcessor bp;
+    static PurchaseCallback mPurchaseCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,9 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         c =this;
         pref = new MobilePreferenceHandler(c);
+        // pref.setUserPaidOrNot(false);
+
+
         loadingDialog =  new MaterialDialog.Builder(this)
                 .progress(true,0)
                 .build();
@@ -102,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         tag = (TextView) findViewById(R.id.tag);
          navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        setProVisibility(pref);
         final TextView userNameTv  = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name);
         final TextView userEmailTv  = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email);
 
@@ -198,7 +204,15 @@ public class MainActivity extends AppCompatActivity
 
         Log.e(TAG,"purchase call ");
 
+        //onProductPurchased("",null);
 
+
+    }
+
+
+    public void setPurchaseCallback(PurchaseCallback mCallback){
+        Log.e(TAG,"setPurchaseCallback  ");
+        this.mPurchaseCallback = mCallback;
     }
 
 
@@ -274,6 +288,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    public void setProVisibility(MobilePreferenceHandler pref){
+        Log.e(TAG,"setProVisibility call ");
+        if(navigationView!=null) {
+            MenuItem menuLogout = navigationView.getMenu().findItem(R.id.pro);
+            if (pref != null && menuLogout != null) {
+                Log.e(TAG, "setProVisibility call ");
+                if (pref.getUserPaidOrNot()) {
+                    menuLogout.setVisible(false);
+                }
+            }
+        }else{
+            Log.e(TAG, "navigationView false ");
+
+        }
+    }
 
 
 
@@ -283,6 +312,14 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
      //   mGoogleApiClient.connect();
+        Log.e(TAG,"onResume visiblity call ");
+        if(pref!=null){
+            Log.e(TAG,"onResume pref not null ");
+            setProVisibility(pref);
+        }else{
+            Log.e(TAG,"onResume pref is null ");
+
+        }
 
 
     }
@@ -423,7 +460,8 @@ public class MainActivity extends AppCompatActivity
             logoutUser();
         }
         else if(id == R.id.pro){
-            bp.purchase(this, Config.productIdAds);
+           // onProductPurchased("",null);
+           bp.purchase(this, Config.productIdAds);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -439,8 +477,14 @@ public class MainActivity extends AppCompatActivity
         Log.e(TAG,"onProductPurchased transation details = "+details.purchaseToken);
         if(pref!=null){
             pref.setUserPaidOrNot(true);
+            setProVisibility(pref);
         }
-
+        if(mPurchaseCallback!=null){
+            Log.e(TAG,"mPurchaseCallback is not null ");
+            mPurchaseCallback.onPurchaseMade(productId);
+        }else{
+            Log.e(TAG,"mPurchaseCallback is null ");
+        }
     }
 
     @Override

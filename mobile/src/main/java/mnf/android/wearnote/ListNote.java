@@ -52,6 +52,7 @@ import butterknife.ButterKnife;
 import mnf.android.wearnote.Adapters.RecycleViewAdapter;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.callbacks.AdapterItemUpdate;
+import mnf.android.wearnote.callbacks.PurchaseCallback;
 import mnf.android.wearnote.tools.DividerItemDecoration;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.RecyclerTouchListener;
@@ -90,7 +91,8 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
     private InterstitialAd mInterstitialAd;
     public static String TAG  = "NoteList";
     BillingProcessor bp;
-
+    boolean canZoom;
+    AdView mAdView;
     public ListNote() {
         // Required empty public constructor
     }
@@ -145,7 +147,8 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
         if (bp != null) {
             bp.release();
         }
-        super.onDestroy();    }
+        super.onDestroy();
+    }
 
 
     @Override
@@ -186,7 +189,7 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
 
 
         if(!pref.getUserPaidOrNot()){
-            AdView mAdView = (AdView) v.findViewById(R.id.adView);
+             mAdView = (AdView) v.findViewById(R.id.adView);
             mAdView.setVisibility(View.VISIBLE);
 
             AdRequest adRequest = new AdRequest.Builder().build();
@@ -200,6 +203,19 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
                 public void onAdClosed() {
                     super.onAdClosed();
                     mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                    Log.v(TAG,"onAdClosed");
+                }
+
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    Log.v(TAG,"onAdLoaded");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    Log.v(TAG,"onAdOpened");
                 }
             });
 
@@ -209,7 +225,16 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
         }
 
 
-
+        new MainActivity().setPurchaseCallback(new PurchaseCallback() {
+            @Override
+            public void onPurchaseMade(String productId) {
+                Log.e(TAG,"onPurchase callback list note product id = "+productId );
+                if(mAdView!=null){
+                    Log.e(TAG,"onPurchase callback list note adView is not null "+productId );
+                    mAdView.setVisibility(View.GONE);
+                }
+            }
+        });
 
 
 
@@ -346,7 +371,9 @@ public class ListNote extends Fragment implements BillingProcessor.IBillingHandl
                 pref.setUserNoteClicks(pref.getUserNoteClicks()+1);
                 // Movie movie = movieList.get(position);
                 // Toast.makeText(c, position + " is selected!", Toast.LENGTH_SHORT).show();
-                if(mInterstitialAd!=null) {
+
+
+                if((mInterstitialAd!=null)&&(!pref.getUserPaidOrNot())) {
                     if (mInterstitialAd.isLoaded() && (pref.getUserAdsClickLeft() >= Config.adclickLimit)) {
                         Log.e(TAG, " Intertial ad is loading.  clicks - " + pref.getUserAdsClickLeft());
                         mInterstitialAd.show();
