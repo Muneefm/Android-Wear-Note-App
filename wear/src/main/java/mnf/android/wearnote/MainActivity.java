@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.DefaultOffsettingHelper;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableRecyclerView;
@@ -33,7 +34,7 @@ import mnf.android.wearnote.Model.MenuModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.RecyclerTouchListener;
 
-public class MainActivity extends Activity implements DataApi.DataListener,
+public class MainActivity extends WearableActivity implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
     private GoogleApiClient mGoogleApiClient;
@@ -73,10 +74,10 @@ public class MainActivity extends Activity implements DataApi.DataListener,
         mRecyclerView.setBezelWidth(1f);
         mRecyclerView.setScrollDegreesPerScreen(250);
 
-      //  getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note").commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerView,new ListFragment().newInstance("","")).addToBackStack("note").commit();
 
 
-        final List<MenuModel> listItem = new ArrayList<>();
+     /*   final List<MenuModel> listItem = new ArrayList<>();
         listItem.add(new MenuModel("1","New Note",R.mipmap.red_add));
         listItem.add(new MenuModel("2","Notes",R.mipmap.red_note));
         listItem.add(new MenuModel("3","Settings",R.mipmap.red_settr));
@@ -116,7 +117,7 @@ public class MainActivity extends Activity implements DataApi.DataListener,
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        }));*/
 
 
 

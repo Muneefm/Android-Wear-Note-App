@@ -7,8 +7,8 @@ android {
         applicationId "mnf.android.wearnote"
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
     }
     buildTypes {
         release {
@@ -30,4 +30,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-wearable:10.0.1'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.android.support:appcompat-v7:25.1.0'
+    provided 'com.google.android.wearable:wearable:1.0.0'
+
 }
