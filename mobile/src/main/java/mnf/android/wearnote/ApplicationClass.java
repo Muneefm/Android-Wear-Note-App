@@ -23,11 +23,14 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -50,6 +53,7 @@ import mnf.android.wearnote.Model.BaseModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.callbacks.AdapterItemUpdate;
 import mnf.android.wearnote.callbacks.DbBackupCallback;
+import mnf.android.wearnote.callbacks.WearNodeApiListener;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
@@ -79,6 +83,7 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
     static AdapterItemUpdate mListenerAdapter;
     private FirebaseAnalytics mFirebaseAnalytics;
     public static String TAG = "ApplicationClass";
+    static WearNodeApiListener mNodeListener;
 
 
     @Override
@@ -130,8 +135,28 @@ public class ApplicationClass extends MultiDexApplication implements NavigationV
 
 
 
+    public void getConectedWearDevice(){
 
+        Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
+            @Override
+            public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
+                List<Node> nodes = getConnectedNodesResult.getNodes();
+                Log.e("TAG","getWearDeviceConected Result "+nodes.size());
 
+                if(mNodeListener!=null) {
+                    Log.e("TAG","mNodeListener is not null");
+                    mNodeListener.onNodeConnected(nodes);
+                }else{
+                    Log.e("TAG","mNodeListener is null");
+                }
+            }
+        });
+    }
+
+    public void setWearNodeListener(WearNodeApiListener mNodeListener){
+        this.mNodeListener = mNodeListener;
+        getConectedWearDevice();
+    }
 
 
 

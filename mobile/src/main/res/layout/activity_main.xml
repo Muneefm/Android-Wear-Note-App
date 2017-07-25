@@ -34,11 +34,39 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey500"
                     android:textSize="18dp"
+                    android:visibility="gone"
                     android:layout_centerHorizontal="true"
                     android:text="Sign in to sync notes"
 
                     />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/con"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                >
+
+
+                <TextView
+                    android:id="@+id/watch_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@android:color/white"
+                    android:layout_marginRight="30dp"
+                    android:textStyle="bold"
+                    android:text=""
+                    />
+
+
+            </RelativeLayout>
+
 
 
         </RelativeLayout>

@@ -3,6 +3,7 @@ package mnf.android.wearnote;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -55,6 +57,7 @@ import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Model.NoteJson;
 import mnf.android.wearnote.callbacks.DbBackupCallback;
 import mnf.android.wearnote.callbacks.PurchaseCallback;
+import mnf.android.wearnote.callbacks.WearNodeApiListener;
 import mnf.android.wearnote.tools.MobilePreferenceHandler;
 import mnf.android.wearnote.tools.WearPreferenceHandler;
 
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     public static String TAG = "MainActivity";
     BillingProcessor bp;
     static PurchaseCallback mPurchaseCallback;
+    TextView watchConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +89,15 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         c =this;
         pref = new MobilePreferenceHandler(c);
-        // pref.setUserPaidOrNot(false);
 
+
+       //  pref.setUserPaidOrNot(true);
+
+
+
+        watchConnected = (TextView) findViewById(R.id.watch_tv);
+        Typeface typeface=Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        watchConnected.setTypeface(typeface);
 
         loadingDialog =  new MaterialDialog.Builder(this)
                 .progress(true,0)
@@ -148,24 +159,31 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
         mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-
+                String proTag = "";
+                if(pref!=null){
+                    if(pref.getUserPaidOrNot()){
+                        proTag = " (PRO)";
+                    }
+                }
                 if(user != null){
                     //user logged in
                     setAccountVisibility(true);
                     if(tag!=null)
                     tag.setVisibility(View.INVISIBLE);
 
+
+
+
                     Log.e("MainActivity","user logged in main listener ");
                     //Toast.makeText(c,"Successfully logged in",Toast.LENGTH_LONG).show();
                    // ApplicationClass.backupDbToFirebase();
                     //  attachView(user.getDisplayName());
                     if(user.getDisplayName()!=null)
-                    userNameTv.setText(user.getDisplayName());
+                    userNameTv.setText(user.getDisplayName()+proTag);
 
                     if(user.getEmail()!=null)
                     userEmailTv.setText(user.getEmail());
@@ -182,7 +200,7 @@ public class MainActivity extends AppCompatActivity
 
                 }else{
                     setAccountVisibility(false);
-                    userNameTv.setText("Guest User");
+                    userNameTv.setText("Guest User"+proTag);
                     userEmailTv.setText("");
                     userImageView.setVisibility(View.INVISIBLE);
                     if(tag!=null)
@@ -320,6 +338,24 @@ public class MainActivity extends AppCompatActivity
             Log.e(TAG,"onResume pref is null ");
 
         }
+
+        new ApplicationClass().setWearNodeListener(new WearNodeApiListener() {
+            @Override
+            public void onNodeConnected(List<Node> nodeList) {
+                Log.e("TAG","onNodeConnected "+nodeList.size());
+                if(watchConnected!=null){
+                    watchConnected.setVisibility(View.VISIBLE);
+                    if(nodeList.size()>0){
+                        watchConnected.setText("Connected Device: "+nodeList.get(0).getDisplayName());
+                    }else{
+                        watchConnected.setText("No wear device Found");
+                    }
+                }
+            }
+        });
+
+
+
 
 
     }
