@@ -1,6 +1,7 @@
 package mnf.android.wearnote;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.Cache;
@@ -53,6 +55,7 @@ public class ListFragment extends Fragment {
     WearPreferenceHandler pref;
     final static String TAG = "ListFragment";
     RecyclerTouchListener recyclerTouchListener;
+    TextView tvNoItem;
 
     private OnFragmentInteractionListener mListener;
     Context c;
@@ -96,7 +99,10 @@ public class ListFragment extends Fragment {
         pref = new WearPreferenceHandler(getActivity());
         c = getActivity();
         mRecyclerView = (WearableRecyclerView) v.findViewById(R.id.notes_recycler_view);
-      //  mRecyclerView.setCenterEdgeItems(true);
+        tvNoItem = (TextView) v.findViewById(R.id.empty_placeholder);
+        Typeface faceCabin=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Cabin-Regular.ttf");
+        tvNoItem.setTypeface(faceCabin);
+        //  mRecyclerView.setCenterEdgeItems(true);
         headerLayout = (RelativeLayout) v.findViewById(R.id.rel_head);
         if(pref.getTheme()){
             headerLayout.setBackgroundColor(getResources().getColor(R.color.black));
@@ -109,6 +115,11 @@ public class ListFragment extends Fragment {
         mRecyclerView.setBezelWidth(0.5f);
         //mRecyclerView.setScrollDegreesPerScreen(90);
          noteData = Config.getDBItems();
+        if(noteData.size()==0){
+            tvNoItem.setVisibility(View.VISIBLE);
+        }else{
+            tvNoItem.setVisibility(View.GONE);
+        }
         mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteData));
 
         recyclerTouchListener = new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
@@ -146,6 +157,8 @@ public class ListFragment extends Fragment {
                         @Override
                         public void run() {
                             Log.e(TAG,"running on ui thread");
+                            tvNoItem.setVisibility(View.GONE);
+
                             mRecyclerView.setAdapter(new RecycleAdapterNotes(getContext(), noteDataNew));
 
                             if(recyclerTouchListener!=null)

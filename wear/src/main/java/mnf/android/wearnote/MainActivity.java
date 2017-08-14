@@ -121,16 +121,19 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
 
 
 
-
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
         new AppController().sendMessage();
+        new AppController().checkIfPhoneHasApp();
 
     }
+
 
     @Override
     protected void onPause() {

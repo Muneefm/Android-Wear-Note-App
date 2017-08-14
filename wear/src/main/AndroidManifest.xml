@@ -22,6 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -29,7 +32,9 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="2" />
-        <meta-data android:name="AA_MODELS" android:value="mnf.android.wearnote.Model.Note" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="mnf.android.wearnote.Model.Note" />
         <!--
             <service android:name=".Tools.DataLayerListenerService">
             <intent-filter>
@@ -43,8 +48,14 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
-        <uses-library android:name="com.google.android.wearable"
+
+        <uses-library
+            android:name="com.google.android.wearable"
             android:required="false" />
+
+        <activity android:name=".InstallNoteActivity">
+
+        </activity>
     </application>
 
 </manifest>
