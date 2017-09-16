@@ -11,6 +11,6 @@
     <string name="facebook_application_id" translatable="false">1929506570611902</string>
     <!-- Facebook Application ID, prefixed by 'fb'.  Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb1929506570611902</string>
-    <string name="no_note_wear">No notes yet! \n  please add from phone app.</string>
+    <string name="no_note_wear">No notes yet! \n  please add from phone app. \n if phone app not installed, open Playstore and search "Wear note"</string>
 
 </resources>

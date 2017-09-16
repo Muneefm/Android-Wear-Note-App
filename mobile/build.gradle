@@ -9,8 +9,8 @@ android {
         targetSdkVersion 25
         multiDexEnabled true
 
-        versionCode 11
-        versionName "2.0"
+        versionCode 14
+        versionName "2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

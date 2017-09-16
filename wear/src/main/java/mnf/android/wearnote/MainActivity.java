@@ -2,6 +2,7 @@ package mnf.android.wearnote;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableRecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +33,7 @@ import java.util.List;
 import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
 import mnf.android.wearnote.Fragment.FragmentNote;
 import mnf.android.wearnote.Fragment.NewNoteFragment;
+import mnf.android.wearnote.Interfaces.PhoneAppCheckCallback;
 import mnf.android.wearnote.Model.MenuModel;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.RecyclerTouchListener;
@@ -41,23 +45,28 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
 
     private TextView mTextView;
     private static final String COUNT_KEY = "count";
-
+    RelativeLayout appInstallContainer;
     WearableRecyclerView mRecyclerView;
+    TextView tvInstallNote;
+    Button installBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = (WearableRecyclerView) findViewById(R.id.recycler_launcher_view);
         mRecyclerView.setCenterEdgeItems(true);
-
-       /* final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
+        appInstallContainer = (RelativeLayout) findViewById(R.id.not_installed_container);
+        tvInstallNote = (TextView) findViewById(R.id.install_note);
+        installBtn = (Button) findViewById(R.id.inst_btn);
+        Typeface faceCabin=Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Cabin-Regular.ttf");
+        tvInstallNote.setTypeface(faceCabin);
+        /* final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
                 mTextView = (TextView) stub.findViewById(R.id.text);
             }
         });
-
 */
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -130,7 +139,9 @@ public class MainActivity extends WearableActivity implements DataApi.DataListen
         super.onResume();
         mGoogleApiClient.connect();
         new AppController().sendMessage();
-        new AppController().checkIfPhoneHasApp();
+        Log.e("callback","onResume ");
+
+
 
     }
 

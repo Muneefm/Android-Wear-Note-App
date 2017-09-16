@@ -19,6 +19,7 @@ public class Reciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("TAG","Reciever onReceive");
+        if(intent.getExtras().getString("reminderid")!=null&&intent.getExtras().getString("noteid")!=null)
         if((!intent.getExtras().getString("reminderid").equals(""))&&(!intent.getExtras().getString("noteid").equals(""))) {
             String idReminder = intent.getExtras().getString("reminderid");
 
@@ -42,5 +43,6 @@ public class Reciever extends BroadcastReceiver {
 
             }
         }
+
     }
 }

@@ -55,4 +55,71 @@
             android:text="@string/no_note_wear"
             />
     </android.support.wearable.view.BoxInsetLayout>
+
+    <RelativeLayout
+        android:id="@+id/install_app_container"
+        android:layout_width="match_parent"
+        android:background="@color/black"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+       >
+
+
+        <android.support.wearable.view.BoxInsetLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_above="@+id/install_note"
+                    android:layout_centerHorizontal="true"
+
+                    />
+                <TextView
+                    android:id="@+id/install_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+
+                    android:textStyle="bold"
+                    android:text="Install Phone app to \n add notes &amp; for more customisations"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:id="@+id/inst_btn"
+                    android:layout_below="@+id/install_note"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="install"
+                    android:textColor="@color/black"
+                    android:background="@color/white"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="8dp"
+                    android:layout_marginTop="10dp"
+
+                    android:layout_below="@+id/inst_btn"
+                    android:layout_marginBottom="10dp"
+                    android:text="if installed swipe right"
+                    />
+            </RelativeLayout>
+
+        </android.support.wearable.view.BoxInsetLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

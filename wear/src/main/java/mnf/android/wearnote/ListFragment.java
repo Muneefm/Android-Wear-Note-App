@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import mnf.android.wearnote.Adapter.RecycleAdapterMenu;
 import mnf.android.wearnote.Adapter.RecycleAdapterNotes;
 import mnf.android.wearnote.Fragment.FragmentNote;
 import mnf.android.wearnote.Interfaces.DataUpdateCallback;
+import mnf.android.wearnote.Interfaces.PhoneAppCheckCallback;
 import mnf.android.wearnote.Model.Note;
 import mnf.android.wearnote.Tools.Config;
 import mnf.android.wearnote.Tools.DataLayerListenerService;
@@ -60,6 +62,9 @@ public class ListFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     Context c;
 
+    RelativeLayout appInstallContainer;
+    TextView tvInstallNote;
+    Button installBtn;
     public ListFragment() {
         // Required empty public constructor
     }
@@ -98,6 +103,11 @@ public class ListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         pref = new WearPreferenceHandler(getActivity());
         c = getActivity();
+
+        appInstallContainer = (RelativeLayout) v.findViewById(R.id.install_app_container);
+        tvInstallNote = (TextView) v.findViewById(R.id.install_note);
+        installBtn = (Button) v.findViewById(R.id.inst_btn);
+
         mRecyclerView = (WearableRecyclerView) v.findViewById(R.id.notes_recycler_view);
         tvNoItem = (TextView) v.findViewById(R.id.empty_placeholder);
         Typeface faceCabin=Typeface.createFromAsset(getActivity().getAssets(), "fonts/Cabin-Regular.ttf");
@@ -173,9 +183,12 @@ public class ListFragment extends Fragment {
                                     Log.e("TAG", " addOnItemTouchListener position = " + position);
 
                                     if(noteDataNew!=null) {
-                                        Note noteItem = noteDataNew.get(position);
-                                        getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView,new FragmentNote().newInstance(""+noteItem.getIdn(),""+noteItem.getBody())).addToBackStack("note_detail").commit();
-                                    }
+                                        if(noteDataNew.size()>=position){
+                                            Note noteItem = noteDataNew.get(position);
+                                            getActivity().getFragmentManager().beginTransaction().replace(R.id.containerView, new FragmentNote().newInstance("" + noteItem.getIdn(), "" + noteItem.getBody())).addToBackStack("note_detail").commit();
+                                        }
+
+                                        }
                                     //   getActivity().getFragmentManager().beginTransaction().replace(R.id.content_main,new NoteFragment().newInstance(list.get(position).getIdn().toString(),"")).addToBackStack("note").commit();
 
                                 }
@@ -193,6 +206,31 @@ public class ListFragment extends Fragment {
                 }
         });
 
+        Log.e("callback","checkIfPhoneHasApp ");
+        new AppController().checkIfPhoneHasApp(new PhoneAppCheckCallback() {
+            @Override
+            public void onAppNotFound() {
+                Log.e("callback","onAppNotFound visible ");
+                appInstallContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAppFound() {
+                Log.e("callback","onAppFound ");
+                appInstallContainer.setVisibility(View.GONE);
+
+
+            }
+        });
+
+
+        installBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AppController().openAppInStoreOnPhone();
+
+            }
+        });
 
             return  v;
     }

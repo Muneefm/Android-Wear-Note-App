@@ -17,6 +17,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.wearable.CapabilityApi;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.MessageApi;
@@ -29,6 +30,7 @@ import com.google.android.wearable.playstore.PlayStoreAvailability;
 import java.util.Set;
 
 import mnf.android.wearnote.Interfaces.DataUpdateCallback;
+import mnf.android.wearnote.Interfaces.PhoneAppCheckCallback;
 
 /**
  * Created by muneef on 31/01/17.
@@ -45,6 +47,7 @@ public class AppController extends Application implements GoogleApiClient.Connec
             "market://details?id=mnf.android.wearnote";
     private static final String CAPABILITY_PHONE_APP = "verify_remote_wearnote_phone_app";
     private Node mAndroidPhoneNodeWithApp;
+    PhoneAppCheckCallback appCheckCallback;
 
 
     @Override
@@ -125,8 +128,9 @@ public class AppController extends Application implements GoogleApiClient.Connec
 
     }
 
-    public void checkIfPhoneHasApp() {
+    public void checkIfPhoneHasApp(PhoneAppCheckCallback mCallback) {
         Log.d(TAG, "checkIfPhoneHasApp()");
+        this.appCheckCallback = mCallback;
 
         PendingResult<CapabilityApi.GetCapabilityResult> pendingResult =
                 Wearable.CapabilityApi.getCapability(
@@ -239,6 +243,7 @@ public class AppController extends Application implements GoogleApiClient.Connec
         return bestNodeId;
     }
     private void verifyNodeAndUpdateUI() {
+        Log.e("callback","verifyNodeAndUpdateUI ");
 
         if (mAndroidPhoneNodeWithApp != null) {
 
@@ -251,12 +256,23 @@ public class AppController extends Application implements GoogleApiClient.Connec
             mInformationTextView.setText(installMessage);
             mRemoteOpenButton.setVisibility(View.INVISIBLE);*/
             Log.e(TAG, " App found in phone " );
-
-
+            if(appCheckCallback !=null){
+                appCheckCallback.onAppFound();
+                Log.e("callback","appCheckCallback.onAppFound() ");
+            }
         } else {
-            Log.e(TAG, " App not found in phone " );
-            Intent installWindow = new Intent(getInstance(), InstallNoteActivity.class);
-            getInstance().startActivity(installWindow);
+            if(appCheckCallback !=null){
+                appCheckCallback.onAppNotFound();
+                Log.e("callback","appCheckCallback.onAppNotFound() ");
+
+            }
+            /*Log.e(TAG, " App not found in phone " );
+            try {
+                Intent installWindow = new Intent(getInstance(), InstallNoteActivity.class);
+                getInstance().startActivity(installWindow);
+            }catch (RuntimeExecutionException e){
+                Log.e("TAG","error");
+            }*/
 
         }
     }
