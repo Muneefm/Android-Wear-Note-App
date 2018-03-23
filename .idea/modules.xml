@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android-Wear-Note-App.iml" filepath="$PROJECT_DIR$/Android-Wear-Note-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/WearNote.iml" filepath="$PROJECT_DIR$/WearNote.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/wear/wear.iml" filepath="$PROJECT_DIR$/wear/wear.iml" />

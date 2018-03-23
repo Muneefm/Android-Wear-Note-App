@@ -18,31 +18,32 @@ import mnf.android.wearnote.Model.ReminderModel;
 public class Reciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("TAG","Reciever onReceive");
-        if(intent.getExtras().getString("reminderid")!=null&&intent.getExtras().getString("noteid")!=null)
-        if((!intent.getExtras().getString("reminderid").equals(""))&&(!intent.getExtras().getString("noteid").equals(""))) {
-            String idReminder = intent.getExtras().getString("reminderid");
+        Log.e("TAG", "Reciever onReceive");
+        if (intent.getExtras() != null) {
+            if (intent.getExtras().getString("reminderid") != null && intent.getExtras().getString("noteid") != null)
+                if ((!intent.getExtras().getString("reminderid").equals("")) && (!intent.getExtras().getString("noteid").equals(""))) {
+                    String idReminder = intent.getExtras().getString("reminderid");
 
-            ReminderModel reminderModel = new Select()
-                    .from(ReminderModel.class)
-                    .where("idn = ?", idReminder)
-                    .executeSingle();
-            Log.e("TAG","Reciever status = "+reminderModel.getStatus());
+                    ReminderModel reminderModel = new Select()
+                            .from(ReminderModel.class)
+                            .where("idn = ?", idReminder)
+                            .executeSingle();
+                    Log.e("TAG", "Reciever status = " + reminderModel.getStatus());
 
-            if (reminderModel.getStatus() == 1) {
-                String id = intent.getExtras().getString("noteid");
-                Log.e("TAG", "Reciever Extras id = " + id);
+                    if (reminderModel.getStatus() == 1) {
+                        String id = intent.getExtras().getString("noteid");
+                        Log.e("TAG", "Reciever Extras id = " + id);
 
-                Note note = new Select()
-                        .from(Note.class)
-                        .where("idn = ?", id)
-                        .executeSingle();
-                new SendNotification(context, note.getTitle(), note.getBody(),id).sendNotificationWear();
-                new Delete().from(ReminderModel.class).where("idn = ?",idReminder).execute();
-                Log.e("TAG", "Reciever delete id = " + idReminder);
+                        Note note = new Select()
+                                .from(Note.class)
+                                .where("idn = ?", id)
+                                .executeSingle();
+                        new SendNotification(context, note.getTitle(), note.getBody(), id).sendNotificationWear();
+                        new Delete().from(ReminderModel.class).where("idn = ?", idReminder).execute();
+                        Log.e("TAG", "Reciever delete id = " + idReminder);
 
-            }
+                    }
+                }
         }
-
     }
 }

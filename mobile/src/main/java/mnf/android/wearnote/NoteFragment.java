@@ -168,7 +168,6 @@ public class NoteFragment extends Fragment {
             default:
                 edtNote.setTypeface(faceRoboto);
                 break;
-
         }
 
 
@@ -198,10 +197,14 @@ public class NoteFragment extends Fragment {
                 .where("idn = ?", mParam1)
                 .executeSingle();
 
-        if(note.getTitle()!=null)
-            getActivity().setTitle(note.getTitle());
+       if(note != null) { // changes based on crash analytics ( not tested)
 
-        edtNote.setText(note.getBody());
+
+           if (note.getTitle() != null)
+               getActivity().setTitle(note.getTitle());
+
+           edtNote.setText(note.getBody());
+       }
     }
 
         edtNote.addTextChangedListener(new TextWatcher() {
@@ -219,32 +222,34 @@ public class NoteFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                    Log.e("Tag","afterTextChanged s="+s);
-               // String str= s.toString().trim();
+                Log.e("Tag", "afterTextChanged s=" + s);
+                // String str= s.toString().trim();
                 String multiLines = s.toString();
                 String[] lines;
                 String delimiter = "\n";
-                Log.e("TAG","string before escape = "+s.toString());
+                Log.e("TAG", "string before escape = " + s.toString());
 
                 String str = DatabaseUtils.sqlEscapeString(s.toString());
-               // s.toString().replaceAll("'","''");
-                Log.e("TAG","string after escape = "+str);
+                // s.toString().replaceAll("'","''");
+                Log.e("TAG", "string after escape = " + str);
 
                 lines = multiLines.split(delimiter);
                 new Update(Note.class)
-                        .set("body = "+str)
+                        .set("body = " + str)
                         .where("idn = ?", mParam1)
                         .execute();
                 new Update(Note.class)
-                        .set("date = "+"'"+ DateFormat.getDateTimeInstance().format(new Date())+"'")
+                        .set("date = " + "'" + DateFormat.getDateTimeInstance().format(new Date()) + "'")
                         .where("idn = ?", mParam1)
                         .execute();
-                if(lines[0]!=null)
-                new Update(Note.class)
-                        .set("title = "+""+DatabaseUtils.sqlEscapeString(lines[0].trim())+"")
-                        .where("idn = ?", mParam1)
-                        .execute();
-                ApplicationClass.syncDatatoWear();
+                // if(lines[0]!=null)   changing based on firebase crash analytics
+                if (lines.length > 0) {
+                    new Update(Note.class)
+                            .set("title = " + "" + DatabaseUtils.sqlEscapeString(lines[0].trim()) + "")
+                            .where("idn = ?", mParam1)
+                            .execute();
+                    ApplicationClass.syncDatatoWear();
+                }
             }
         });
 
@@ -299,7 +304,8 @@ public class NoteFragment extends Fragment {
                 .from(Note.class)
                 .where("idn = ?", mParam1)
                 .executeSingle();
-        new SendNotification(context,noteGet.body,noteGet.getTitle(),mParam1).sendNotificationWear();
+        if(noteGet!=null)  //added based on firebase crash analytics.  (Not tested)
+            new SendNotification(context,noteGet.body,noteGet.getTitle(),mParam1).sendNotificationWear();
     }
 
 
@@ -357,9 +363,10 @@ public class NoteFragment extends Fragment {
                     .from(Note.class)
                     .where("idn = ?", mParam1)
                     .executeSingle();
+
+
+            if(noteGet!=null)  //added based on firebase crash analytics.  (Not tested)
              new SendNotification(context,noteGet.body,noteGet.getTitle(),mParam1).sendNotificationWear();
-
-
             return true;
         }else if(id == R.id.send_ontime){
             openDateView();
