@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
@@ -10,8 +10,8 @@ android {
         targetSdkVersion 27
         multiDexEnabled true
 
-        versionCode 14
-        versionName "2.2"
+        versionCode 17
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -72,7 +72,7 @@ dependencies {
     wearApp project(':wear')
     compile 'com.anjlab.android.iab.v3:library:1.0.44'
 
-    //compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
 
 
 }
