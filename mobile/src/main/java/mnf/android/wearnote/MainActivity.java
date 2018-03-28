@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                hideProgressLoading();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 String proTag = "";
                 if(pref!=null){
@@ -236,6 +237,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG,"onActivityResult, requestCode = "+requestCode+"resultCode- "+resultCode);
         if (!bp.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -287,15 +289,24 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
+                        //.setTheme(R.style.LoginTheme)
 
                         .setIsSmartLockEnabled(false)
-                        .setProviders(Arrays.asList(
-                                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build())  //new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
+
+                        .setAvailableProviders(Arrays.asList(
+                               // new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+                                new AuthUI.IdpConfig.GoogleBuilder().build()
+                                )  //new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
                                 )
 
                         .build(),
                 RC_SIGN_IN);
+       showProgressLoading("We are login you in...","Please hang on");
+       /* new MaterialDialog.Builder(c)
+                .title("Please hang on")
+                .content("We are login you in...")
+                .progress(true, 0)
+                .show();*/
 
     }
 

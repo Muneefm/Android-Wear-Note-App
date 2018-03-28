@@ -59,6 +59,12 @@
             </action>
         </intent-filter>
         </receiver>
+        <provider
+            android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="mnf.android.wearnote"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>
