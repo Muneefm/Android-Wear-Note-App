@@ -8,8 +8,8 @@ android {
         applicationId "mnf.android.wearnote"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 16
-        versionName "2.4"
+        versionCode 19
+        versionName "2.7"
     }
     buildTypes {
         release {

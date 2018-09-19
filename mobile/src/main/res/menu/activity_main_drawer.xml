@@ -16,7 +16,10 @@
             android:icon="@drawable/ic_nav_settings"
 
             android:title="Settings" />
-
+        <item
+            android:id="@+id/privacy"
+            android:icon="@drawable/ic_privacy"
+            android:title="Privacy Policies" />
       <!--  <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -43,5 +46,8 @@
                 android:title="Upgrade to PRO" />
         </menu>
     </item>
+
+
+
 
 </menu>
