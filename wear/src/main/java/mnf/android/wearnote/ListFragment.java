@@ -206,7 +206,7 @@ public class ListFragment extends Fragment {
                 }
         });
 
-        Log.e("callback","checkIfPhoneHasApp ");
+      /*  Log.e("callback","checkIfPhoneHasApp ");
         new AppController().checkIfPhoneHasApp(new PhoneAppCheckCallback() {
             @Override
             public void onAppNotFound() {
@@ -221,7 +221,7 @@ public class ListFragment extends Fragment {
 
 
             }
-        });
+        });*/
 
 
         installBtn.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +258,22 @@ public class ListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         AppController.sendMessage();
+       /* Log.e("callback","checkIfPhoneHasApp ");
+        new AppController().checkIfPhoneHasApp(new PhoneAppCheckCallback() {
+            @Override
+            public void onAppNotFound() {
+                Log.e("callback","onAppNotFound visible ");
+                appInstallContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAppFound() {
+                Log.e("callback","onAppFound ");
+                appInstallContainer.setVisibility(View.GONE);
+
+
+            }
+        });*/
     }
 
     /**

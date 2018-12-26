@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "mnf.android.wearnote"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         multiDexEnabled true
-        versionCode 18
-        versionName "2.6"
+        versionCode 21
+        versionName "2.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,8 +29,8 @@ android {
 
 }
 
-def firebseVersion = '11.8.0'
-def supportVersion = '27.1.0'
+def firebseVersion = '17.0.0'
+def supportVersion = '28.0.0'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -40,16 +40,23 @@ dependencies {
     wearApp project(':wear')
     // compile files('libs/gson-2.8.0 .jar')
 
-    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
 
-    compile "com.google.firebase:firebase-core:$firebseVersion"
-    compile "com.google.firebase:firebase-auth:$firebseVersion"
-    compile 'com.firebaseui:firebase-ui-auth:3.2.2'
-    compile "com.google.firebase:firebase-ads:$firebseVersion"
-    compile "com.google.firebase:firebase-storage:$firebseVersion"
+    implementation "com.google.firebase:firebase-core:16.0.6"
+    implementation "com.google.firebase:firebase-auth:16.1.0"
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.0'
+    implementation "com.google.firebase:firebase-ads:17.1.2"
+    implementation "com.google.firebase:firebase-storage:16.0.5"
 
 
-    compile "com.google.android.gms:play-services:$firebseVersion"
+    // implementation "com.google.android.gms:play-services-wearable:16.0.1"
+    // implementation "com.google.android.gms:play-services:16.1.0"
+    implementation "com.google.android.gms:play-services-wearable:16.0.1"
+    implementation "com.google.android.gms:play-services-wallet:16.0.1"
+    implementation "com.google.android.gms:play-services-maps:16.0.0"
+    implementation "com.google.android.gms:play-services-gcm:16.0.0"
+    implementation "com.google.android.gms:play-services-auth:16.0.1"
+
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:preference-v7:$supportVersion"
@@ -58,21 +65,32 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
 
 
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.android.support:multidex:1.0.3'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    compile 'com.thebluealliance:spectrum:0.7.1'
-    compile 'com.github.florent37:singledateandtimepicker:1.0.4'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    implementation 'com.thebluealliance:spectrum:0.7.1'
+    implementation 'com.github.florent37:singledateandtimepicker:1.0.4'
     testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     wearApp project(':wear')
-    compile 'com.anjlab.android.iab.v3:library:1.0.44'
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
-    compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
 
 }
+/*
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '28.0.0'
+            }
+        }
+    }
+}*/
 apply plugin: 'com.google.gms.google-services'
